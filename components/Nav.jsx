@@ -7,7 +7,7 @@ const Nav = () => {
     
     return (
       <nav className="nav">
-        <Link to="/home"> Homepage </Link>
+        <Link to="/home" className="link-homepage"> Homepage </Link>
         <p><b>Logged in as:</b> { user }</p>
       </nav>
     );
