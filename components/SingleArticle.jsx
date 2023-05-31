@@ -8,7 +8,7 @@ const SingleArticle = () => {
   const { article_id } = useParams();
 
   useEffect(() => {
-    fetchArticleById(article_id).then(article => {
+    fetchArticleById(article_id).then(({ article }) => {
         setPresentArticle(article)
     })
   }, [article_id]);
