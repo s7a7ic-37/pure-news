@@ -4,9 +4,10 @@ import ArticleCard from "./ArticleCard";
 
 const ArticleList = () => {
   const [articleList, setArticleList] = useState([])
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true)
     fetchAllArticles().then(({ articles }) => {
       setArticleList(articles);
       setIsLoading(false);
