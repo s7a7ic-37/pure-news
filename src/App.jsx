@@ -6,6 +6,7 @@ import Header from '../components/Header';
 import SignIn from '../components/SignIn';
 import Nav from '../components/Nav';
 import ArticleList from '../components/ArticleList';
+import SingleArticle from '../components/SingleArticle';
 
 function App() {
   const location = useLocation();
@@ -20,6 +21,7 @@ function App() {
         <Routes>
           <Route path="/" element={<SignIn setUser={ setUser } />}></Route>
           <Route path='/home' element={<ArticleList />}></Route>
+          <Route path='/articles/:article_id' element={<SingleArticle />}></Route>
         </Routes>
       </>
     </UserContext.Provider>
