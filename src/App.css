@@ -41,8 +41,9 @@
   margin-bottom: 10px;
 }
 
-.article-author {
-  color: #666;
+.article-author,
+.article-comment-count {
+  color: #333;
   font-size: 16px;
   margin-bottom: 5px;
 }

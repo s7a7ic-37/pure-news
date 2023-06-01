@@ -3,7 +3,7 @@ const CommentCard = ({ body, author, votes, created_at }) => {
 
   return (
     <>
-      <h5 className="comment-author">{author}</h5>
+      <h4 className="comment-author">{author}</h4>
       <p className="comment-date">{formattedDate}</p>
       <article className="comment-body">{body}</article>
       <p className="comment-votes">Votes: {votes}</p>

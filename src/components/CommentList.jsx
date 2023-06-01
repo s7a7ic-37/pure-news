@@ -18,7 +18,7 @@ const CommentList = ({ article_id }) => {
 
   return (
     <section className="comment-list">
-      <h4 className="comment-list-title">Comments</h4>
+      <h3 className="comment-list-title">Comments</h3>
       <ul className="comment-card-list">
         {commentList.map((comment) => {
           return (
