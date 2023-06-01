@@ -5,7 +5,7 @@ const SingleArticleCard = ({ presentArticle }) => {
   const formattedDate = new Date(created_at).toLocaleString();
 
   return (
-    <>
+    <section id="article-card-info">
       <h2 className="article-title">{title}</h2>
       <p className="article-author">Posted by {author}</p>
       <p className="article-topic">{topic}</p>
@@ -13,7 +13,7 @@ const SingleArticleCard = ({ presentArticle }) => {
       <article className="article-body">{body}</article>
       <img className="article-image" src={article_img_url} alt={title} />
       <p className="article-votes">Votes: {votes}</p>
-    </>
+    </section>
   );
 };
 
