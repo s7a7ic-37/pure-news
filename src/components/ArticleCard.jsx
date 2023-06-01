@@ -1,10 +1,4 @@
-const ArticleCard = ({
-  author,
-  title,
-  article_img_url,
-  votes,
-  comment_count,
-}) => {
+const ArticleCard = ({author, title, article_img_url, votes, comment_count}) => {
   return (
     <>
       <h3 className="article-title">{title}</h3>
