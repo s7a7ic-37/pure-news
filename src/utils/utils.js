@@ -36,3 +36,11 @@ export const fetchCommentsByArticle = (article_id) => {
       console.log(err);
     });
 };
+
+export const updateArticleVotes = (article_id, voteChange) => {
+  return apiUrl
+    .patch(`/articles/${article_id}`, voteChange)
+    .then(({ data }) => {
+      return data;
+    })
+};
