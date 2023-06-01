@@ -19,15 +19,17 @@ const CommentList = ({ article_id }) => {
   return (
     <section className="comment-list">
       <h3 className="comment-list-title">Comments</h3>
-      <ul className="comment-card-list">
-        {commentList.map((comment) => {
-          return (
-            <li className="comment-card">
-              <CommentCard key={comment.comment_id} {...comment} />
+      {commentList.length === 0 ? (
+        <p>No comments to display</p>
+      ) : (
+        <ul className="comment-card-list">
+          {commentList.map((comment) => (
+            <li className="comment-card" key={comment.comment_id}>
+              <CommentCard {...comment} />
             </li>
-          );
-        })}
-      </ul>
+          ))}
+        </ul>
+      )}
     </section>
   );
 };
