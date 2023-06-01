@@ -22,6 +22,53 @@
   margin-bottom: 1.5rem;
 }
 
+.single-article-card {
+  background-color: #f2f2f2;
+  border-radius: 4px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.article-title {
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.article-author {
+  color: #666;
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.article-topic {
+  color: #666;
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.article-date {
+  color: #333;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.article-body {
+  color: #333;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.article-image {
+  width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.article-votes {
+  color: #333;
+  font-size: 14px;
+}
 .article-card-list {
   list-style-type: none;
 }

@@ -14,3 +14,14 @@ export const fetchAllArticles = () => {
       console.log(err);
     });
 };
+
+export const fetchArticleById = (article_id) => {
+  return apiUrl
+    .get(`/articles/${article_id}`)
+    .then(({ data }) => {
+      return data;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
