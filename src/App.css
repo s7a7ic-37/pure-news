@@ -16,7 +16,13 @@
 .header,
 .nav,
 .sign-in,
-.article-list {
+.article-list,
+.article-card,
+.article-list-title,
+.comment-card-list,
+.comment-list-title,
+.comment-card,
+#article-card-info {
   border: 2px solid red;
   padding: 1rem;
   margin-bottom: 1.5rem;
@@ -60,7 +66,7 @@
 }
 
 .article-image {
-  width: 100%;
+  width: 95%;
   height: auto;
   margin-bottom: 10px;
 }
@@ -69,7 +75,8 @@
   color: #333;
   font-size: 14px;
 }
-.article-card-list {
+.article-card-list,
+.comment-card-list {
   list-style-type: none;
 }
 

@@ -25,3 +25,14 @@ export const fetchArticleById = (article_id) => {
       console.log(err);
     });
 };
+
+export const fetchCommentsByArticle = (article_id) => {
+  return apiUrl
+    .get(`/articles/${article_id}/comments`)
+    .then(({ data }) => {
+      return data;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
