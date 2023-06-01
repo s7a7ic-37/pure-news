@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import {Route, Routes, useLocation} from 'react-router-dom';
 import './App.css';
-import { UserContext } from '../contexts/UserContext';
-import Header from '../components/Header';
-import SignIn from '../components/SignIn';
-import Nav from '../components/Nav';
-import ArticleList from '../components/ArticleList';
-import SingleArticle from '../components/SingleArticle';
+import { UserContext } from './contexts/UserContext';
+import Header from './components/Header';
+import SignIn from './components/SignIn';
+import Nav from './components/Nav';
+import ArticleList from './components/ArticleList';
+import SingleArticle from './components/SingleArticle';
 
 function App() {
   const location = useLocation();

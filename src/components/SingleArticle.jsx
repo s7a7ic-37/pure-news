@@ -9,13 +9,13 @@ const SingleArticle = () => {
 
   useEffect(() => {
     fetchArticleById(article_id).then(({ article }) => {
-        setPresentArticle(article)
-    })
+      setPresentArticle(article);
+    });
   }, [article_id]);
 
   return (
     <main className="single-article-card">
-        <SingleArticleCard presentArticle={ presentArticle }/>
+      <SingleArticleCard presentArticle={presentArticle} />
     </main>
   );
 };
