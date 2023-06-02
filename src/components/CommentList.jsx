@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { fetchCommentsByArticle } from "../utils/utils";
 import CommentCard from "./CommentCard";
+import PostComment from "./PostComment";
 
 const CommentList = ({ article_id }) => {
   const [commentList, setCommentList] = useState([]);
@@ -17,20 +18,23 @@ const CommentList = ({ article_id }) => {
   if (isLoading) return <h2>Comments are loading...</h2>;
 
   return (
-    <section className="comment-list">
-      <h3 className="comment-list-title">Comments</h3>
-      {commentList.length === 0 ? (
-        <p>No comments to display</p>
-      ) : (
-        <ul className="comment-card-list">
-          {commentList.map((comment) => (
-            <li className="comment-card" key={comment.comment_id}>
-              <CommentCard {...comment} />
-            </li>
-          ))}
-        </ul>
-      )}
-    </section>
+    <>
+      <PostComment article_id={article_id} setCommentList={setCommentList} />
+      <section className="comment-list">
+        <h3 className="comment-list-title">Comments</h3>
+        {commentList.length === 0 ? (
+          <p>No comments to display</p>
+        ) : (
+          <ul className="comment-card-list">
+            {commentList.map((comment) => (
+              <li className="comment-card" key={comment.comment_id}>
+                <CommentCard {...comment} />
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+    </>
   );
 };
 

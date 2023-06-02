@@ -89,7 +89,7 @@ const SingleArticleCard = ({ presentArticle }) => {
       >-</button>
       {hasUpVoted && (<h3 className="error-message">You have already up-voted</h3>)}
       {hasDownVoted && (<h3 className="error-message">You have already down-voted</h3>)}
-      {isError && <h3>Error has occurred, please try again later</h3>}
+      {isError && <p className="error-message">Error has occurred, please try again later</p>}
     </section>
   );
 };

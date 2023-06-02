@@ -42,5 +42,16 @@ export const updateArticleVotes = (article_id, voteChange) => {
     .patch(`/articles/${article_id}`, voteChange)
     .then(({ data }) => {
       return data;
+    });
+};
+
+export const addComment = (article_id, username, body) => {
+  return apiUrl
+    .post(`/articles/${article_id}/comments`, {
+      username: username,
+      body: body,
     })
+    .then(({ data }) => {
+      return data.comment[0];
+    });
 };
