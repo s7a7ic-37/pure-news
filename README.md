@@ -27,7 +27,7 @@ Here are the main features of Pure News:
 
 ## Backend Repository
 
-Pure News utilises a backend API, which is hosted separately. You can find the backend repository at https://nc-news-api-z9fc.onrender.com/api. Please refer to the backend documentation for more details on the API endpoints and functionality.
+Pure News utilises a backend API, which is hosted separately. You can find the backend repository at https://github.com/s7a7ic-37/pure-news-api. Please refer to the backend documentation for more details on the API endpoints and functionality.
 
 ## Prerequisites
 
