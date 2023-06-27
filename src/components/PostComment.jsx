@@ -8,13 +8,14 @@ const PostComment = ({ article_id, setCommentList }) => {
   const [isError, setIsError] = useState(false);
   const [isPosted, setIsPosted] = useState(false);
   const [isInputCorrect, setIsInputCorrect] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isInputValid = (input) => {
-    const inputLength = input.match(/[a-zA-Z0-9]/g).length;
+    const inputLength = (input.match(/[a-zA-Z0-9]/g) || []).length;
     return inputLength >= 3;
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (!isInputValid(commentInput)) {
@@ -22,20 +23,24 @@ const PostComment = ({ article_id, setCommentList }) => {
       return;
     }
 
-    addComment(article_id, user, commentInput)
-      .then((comment) => {
-        setCommentList((presentComments) => {
-          return [comment, ...presentComments];
-        });
+    if (isSubmitting) {
+      return;
+    }
 
-        setCommentInput("");
-        setIsPosted(true);
-        setIsError(false);
-        setIsInputCorrect(true);
-      })
-      .catch(() => setIsError(true));
+    setIsSubmitting(true);
 
-    setIsPosted(false);
+    try {
+      const comment = await addComment(article_id, user, commentInput);
+      setCommentList((presentComments) => [comment, ...presentComments]);
+      setCommentInput("");
+      setIsPosted(true);
+      setIsError(false);
+      setIsInputCorrect(true);
+    } catch (error) {
+      setIsError(true);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (event) => {
@@ -56,8 +61,12 @@ const PostComment = ({ article_id, setCommentList }) => {
           onChange={handleChange}
           required
         ></textarea>
-        <button type="submit" className="add-comment-button">
-          Submit
+        <button
+          type="submit"
+          className="add-comment-button"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Submitting..." : "Submit"}
         </button>
       </form>
       {isError && (
