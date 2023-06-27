@@ -22,6 +22,7 @@
 .comment-card-list,
 .comment-list-title,
 .comment-card,
+.submit-comment,
 #article-card-info {
   border: 2px solid red;
   padding: 1rem;
@@ -95,8 +96,9 @@
   color: #c30000;
 }
 
-.vote-button {
-  background-color: #4caf50;
+.vote-button,
+.add-comment-button {
+  background-color: #2b852e;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -109,9 +111,36 @@
 
 .error-message {
   color: #f44336;
+  font-size: 20px;
+  font-weight: 650;
+  margin-top: 10px;
 }
 
 .highlight-button {
   background-color: #f44336;
   color: white;
+}
+
+.submit-comment form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.submit-comment label {
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.submit-comment textarea {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.comment-posted {
+  color: #333;
+  font-size: 20px;
+  margin-top: 10px;
+  font-weight: 700;
 }
