@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
+import styles from "./SignIn.module.css";
 
 const SignIn = () => {
   const [signInInput, setSignInInput] = useState("");
@@ -18,17 +19,24 @@ const SignIn = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="sign-in">
-      <label htmlFor="sign-in">Please provide your username: </label>
-      <input
-        type="text"
-        id="sign-in"
-        value={signInInput}
-        onChange={handleChange}
-        placeholder="weegembump"
-      />
-      <button type="submit">Sign In</button>
-    </form>
+    <div className={styles["sign-in-box"]}>
+      <form onSubmit={handleSubmit} className={styles["form-container"]}>
+        <label htmlFor="sign-in" className={styles.label}>
+          Please provide your username below
+        </label>
+        <input
+          type="text"
+          id="sign-in"
+          value={signInInput}
+          onChange={handleChange}
+          placeholder="weegembump"
+          className={styles.input}
+        />
+        <button type="submit" className={styles.button}>
+          Sign In
+        </button>
+      </form>
+    </div>
   );
 };
 

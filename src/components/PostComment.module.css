@@ -1,0 +1,30 @@
+.submit-comment {
+  margin-top: 2rem;
+}
+
+.add-comment-button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #646cff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.add-comment-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: #ff0000;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.comment-posted {
+  color: #00b300;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}

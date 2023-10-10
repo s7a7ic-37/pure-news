@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { UserContext } from "../contexts/UserContext";
 import { addComment } from "../utils/utils";
+import styles from "./PostComment.module.css";
 
 const PostComment = ({ article_id, setCommentList }) => {
   const { user } = useContext(UserContext);
@@ -49,7 +50,7 @@ const PostComment = ({ article_id, setCommentList }) => {
   };
 
   return (
-    <section className="submit-comment">
+    <section className={styles["submit-comment"]}>
       <form onSubmit={handleSubmit}>
         <label htmlFor="new-comment">Add your comment </label>
         <textarea
@@ -63,22 +64,22 @@ const PostComment = ({ article_id, setCommentList }) => {
         ></textarea>
         <button
           type="submit"
-          className="add-comment-button"
+          className={styles["add-comment-button"]}
           disabled={isSubmitting}
         >
           {isSubmitting ? "Submitting..." : "Submit"}
         </button>
       </form>
       {isError && (
-        <p className="error-message">
+        <p className={styles["error-message"]}>
           Error has occurred, please try again later
         </p>
       )}
       {isPosted && (
-        <p className="comment-posted">Your comment has been posted</p>
+        <p className={styles["comment-posted"]}>Your comment has been posted</p>
       )}
       {!isInputCorrect && (
-        <p className="error-message">
+        <p className={styles["error-message"]}>
           Your comment should be at least 3 characters long
         </p>
       )}

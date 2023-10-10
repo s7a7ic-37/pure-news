@@ -1,0 +1,15 @@
+.header {
+  padding: 0.8em;
+  text-align: center;
+  background: #17a589;
+  color: white;
+  font-size: 1rem;
+  position: fixed;
+  left: 0;
+  right: 0;
+}
+
+.logo {
+  margin-top: 0.2em;
+  margin-bottom: 0.2em;
+}

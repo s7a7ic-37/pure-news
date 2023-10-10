@@ -1,0 +1,17 @@
+.comment-author {
+  font-weight: bold;
+}
+
+.comment-date {
+  color: #777;
+  font-size: 0.8rem;
+}
+
+.comment-body {
+  margin-top: 1rem;
+}
+
+.comment-votes {
+  color: #888;
+  font-size: 0.9rem;
+}

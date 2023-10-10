@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { fetchAllArticles } from "../utils/utils";
 import ArticleCard from "./ArticleCard";
 import { Link } from "react-router-dom";
+import styles from "./ArticleList.module.css";
 
 const ArticleList = () => {
   const [articleList, setArticleList] = useState([]);
@@ -36,14 +37,14 @@ const ArticleList = () => {
   if (isLoading) return <h2>Your page is loading...</h2>;
 
   return (
-    <main className="article-list">
-      <h2 className="article-list-title">Popular articles</h2>
-      <label htmlFor="topicSelect" className="dropdown-label">
+    <main className={styles["article-list"]}>
+      <h2 className={styles["article-list-title"]}>Popular articles</h2>
+      <label htmlFor="topicSelect" className={styles["dropdown-label"]}>
         Select a topic:
       </label>
       <select
         id="topicSelect"
-        className="dropdown"
+        className={styles.dropdown}
         name="topicSelected"
         value={topicSelected}
         onChange={handleTopicChange}
@@ -53,12 +54,12 @@ const ArticleList = () => {
         <option value="cooking">COOKING</option>
         <option value="football">SPORTS</option>
       </select>
-      <label htmlFor="sortSelect" className="dropdown-label">
+      <label htmlFor="sortSelect" className={styles["dropdown-label"]}>
         Sort by:
       </label>
       <select
         id="sortSelect"
-        className="dropdown"
+        className={styles.dropdown}
         name="sortBySelected"
         value={sortBySelected}
         onChange={handleSortByChange}
@@ -69,13 +70,16 @@ const ArticleList = () => {
         <option value="votes">VOTES</option>
         <option value="comment_count">COMMENTS</option>
       </select>
-      <button className="order-button" onClick={toggleOrder}>
+      <button className={styles["order-button"]} onClick={toggleOrder}>
         ORDER {orderSelected === "asc" ? "↑" : "↓"}
       </button>
-      <ul className="article-card-list">
+      <ul className={styles["article-card-list"]}>
         {articleList.map((article) => (
-          <li key={article.article_id} className="article-card">
-            <Link to={`/articles/${article.article_id}`}>
+          <li key={article.article_id} className={styles["article-card"]}>
+            <Link
+              to={`/articles/${article.article_id}`}
+              className={styles["article-card-link"]}
+            >
               <ArticleCard {...article} />
             </Link>
           </li>

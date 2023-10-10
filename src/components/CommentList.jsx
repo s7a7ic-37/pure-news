@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { fetchCommentsByArticle } from "../utils/utils";
 import CommentCard from "./CommentCard";
 import PostComment from "./PostComment";
+import styles from "./CommentList.module.css";
 
 const CommentList = ({ article_id }) => {
   const [commentList, setCommentList] = useState([]);
@@ -20,14 +21,14 @@ const CommentList = ({ article_id }) => {
   return (
     <>
       <PostComment article_id={article_id} setCommentList={setCommentList} />
-      <section className="comment-list">
-        <h3 className="comment-list-title">Comments</h3>
+      <section className={styles["comment-list"]}>
+        <h3 className={styles["comment-list-title"]}>Comments</h3>
         {commentList.length === 0 ? (
           <p>No comments to display</p>
         ) : (
-          <ul className="comment-card-list">
+          <ul className={styles["comment-card-list"]}>
             {commentList.map((comment) => (
-              <li className="comment-card" key={comment.comment_id}>
+              <li className={styles["comment-card"]} key={comment.comment_id}>
                 <CommentCard {...comment} />
               </li>
             ))}

@@ -1,0 +1,18 @@
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #48c9b0;
+  color: #000000;
+  padding-left: 1.3em;
+  padding-right: 1.3em;
+  position: fixed;
+  top: 4.7rem;
+  left: 0;
+  right: 0;
+}
+
+.link-homepage {
+  color: #000000;
+  text-decoration: inherit, underline;
+}

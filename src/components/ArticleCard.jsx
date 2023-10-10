@@ -1,11 +1,25 @@
-const ArticleCard = ({author, title, article_img_url, votes, comment_count}) => {
+import styles from "./ArticleCard.module.css";
+
+const ArticleCard = ({
+  author,
+  title,
+  article_img_url,
+  votes,
+  comment_count,
+}) => {
   return (
     <>
-      <h3 className="article-title">{title}</h3>
-      <h4 className="article-author">{author}</h4>
-      <img className="article-image" src={article_img_url} alt={`${title}`} />
-      <p className="article-votes">Votes: {votes}</p>
-      <p className="article-comment-count">Comments: {comment_count}</p>
+      <h3 className={styles["article-title"]}>{title}</h3>
+      <p className={styles["article-author"]}>By: {author}</p>
+      <img
+        src={article_img_url}
+        alt={title}
+        className={styles["article-image"]}
+      />
+      <p className={styles["article-votes"]}>Votes: {votes}</p>
+      <p className={styles["article-comment-count"]}>
+        Comments: {comment_count}
+      </p>
     </>
   );
 };

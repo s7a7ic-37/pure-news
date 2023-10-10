@@ -1,0 +1,33 @@
+.article-card {
+  display: grid;
+  grid-template-rows: auto auto auto 1fr;
+  gap: 0.5rem;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.article-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0;
+}
+
+.article-author {
+  font-weight: bold;
+  margin-bottom: 0;
+}
+
+.article-image {
+  width: 20%;
+  height: auto;
+  margin-bottom: 0;
+}
+
+.article-votes {
+  margin-bottom: 0;
+}
+
+.article-comment-count {
+  margin-bottom: 0.5rem;
+}

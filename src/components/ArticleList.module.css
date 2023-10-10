@@ -1,0 +1,47 @@
+.article-list {
+  margin-top: 20rem;
+}
+
+.article-list-title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.dropdown-label {
+  font-weight: bold;
+}
+
+.dropdown {
+  padding: 0.5rem;
+  font-size: 1rem;
+  margin-right: 1rem;
+}
+
+.order-button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.article-card-list {
+  list-style: none;
+  padding: 0;
+}
+
+.article-card-link {
+  text-decoration: none;
+}
+
+/* Add hover effect for the link */
+.article-card-link:hover {
+  text-decoration: underline;
+}
+
+/* Add styles for the main article list container */
+.article-list {
+  margin-top: 20px;
+}
