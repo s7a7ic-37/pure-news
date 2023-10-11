@@ -1,33 +1,29 @@
-.article-card {
-  display: grid;
-  grid-template-rows: auto auto auto 1fr;
-  gap: 0.5rem;
-  padding: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
 .article-title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 0;
+  font-size: 1.2rem;
+  margin: 0.5rem 0;
 }
 
 .article-author {
-  font-weight: bold;
-  margin-bottom: 0;
+  font-size: 0.9rem;
+  color: #777;
+  margin: 0;
+  margin-bottom: 0.5rem;
 }
 
 .article-image {
-  width: 20%;
+  max-width: 100%;
   height: auto;
-  margin-bottom: 0;
 }
 
-.article-votes {
-  margin-bottom: 0;
+.article-metadata {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 }
 
+.article-votes,
 .article-comment-count {
-  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: #777;
+  margin-top: 1rem;
 }

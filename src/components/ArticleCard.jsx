@@ -16,10 +16,12 @@ const ArticleCard = ({
         alt={title}
         className={styles["article-image"]}
       />
-      <p className={styles["article-votes"]}>Votes: {votes}</p>
-      <p className={styles["article-comment-count"]}>
-        Comments: {comment_count}
-      </p>
+      <div className={styles["article-metadata"]}>
+        <p className={styles["article-votes"]}>Votes: {votes}</p>
+        <p className={styles["article-comment-count"]}>
+          Comments: {comment_count}
+        </p>
+      </div>
     </>
   );
 };
