@@ -1,30 +1,73 @@
 .submit-comment {
-  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #e0e0e0;
+  padding: 1rem;
+  margin: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
 }
 
-.add-comment-button {
-  margin-top: 1rem;
-  padding: 0.5rem 1rem;
-  background-color: #646cff;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+.new-comment-label {
+  font-size: 0.9rem;
+}
+
+.new-comment-box {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+textarea {
+  width: 100%;
+  max-width: 95%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  margin: 0.5rem 0;
 }
 
 .add-comment-button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
 }
+.add-comment-button {
+  background-color: #76d7c4;
+  color: #000000;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.35rem;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+.add-comment-button:hover {
+  background-color: #17a589;
+  color: white;
+}
+
+.message-container {
+  text-align: center;
+  width: 100%;
+  margin: 0;
+}
 
 .error-message {
-  color: #ff0000;
   font-size: 0.9rem;
-  margin-top: 0.5rem;
+  color: red;
+  margin: 0;
+  padding: 0;
 }
 
 .comment-posted {
-  color: #00b300;
   font-size: 0.9rem;
-  margin-top: 0.5rem;
+  color: #00b300;
+  margin: 0;
+  padding: 0;
 }

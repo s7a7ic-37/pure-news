@@ -52,37 +52,45 @@ const PostComment = ({ article_id, setCommentList }) => {
   return (
     <section className={styles["submit-comment"]}>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="new-comment">Add your comment </label>
-        <textarea
-          name="add-comment"
-          id="new-comment"
-          cols="50"
-          rows="5"
-          value={commentInput}
-          onChange={handleChange}
-          required
-        ></textarea>
-        <button
-          type="submit"
-          className={styles["add-comment-button"]}
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? "Submitting..." : "Submit"}
-        </button>
+        <label htmlFor="new-comment" className={styles["new-comment-label"]}>
+          Comment as {user}
+        </label>
+        <div className={styles["new-comment-box"]}>
+          <textarea
+            name="add-comment"
+            id="new-comment"
+            cols="50"
+            rows="5"
+            value={commentInput}
+            onChange={handleChange}
+            required
+          ></textarea>
+          <button
+            type="submit"
+            className={styles["add-comment-button"]}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Submitting..." : "Submit"}
+          </button>
+        </div>
       </form>
-      {isError && (
-        <p className={styles["error-message"]}>
-          Error has occurred, please try again later
-        </p>
-      )}
-      {isPosted && (
-        <p className={styles["comment-posted"]}>Your comment has been posted</p>
-      )}
-      {!isInputCorrect && (
-        <p className={styles["error-message"]}>
-          Your comment should be at least 3 characters long
-        </p>
-      )}
+      <div className={styles["message-container"]}>
+        {isError && (
+          <p className={styles["error-message"]}>
+            Error has occurred, please try again later
+          </p>
+        )}
+        {isPosted && (
+          <p className={styles["comment-posted"]}>
+            Your comment has been posted
+          </p>
+        )}
+        {!isInputCorrect && (
+          <p className={styles["error-message"]}>
+            Your comment should be at least 3 characters long
+          </p>
+        )}
+      </div>
     </section>
   );
 };
