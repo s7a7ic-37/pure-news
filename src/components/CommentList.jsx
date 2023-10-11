@@ -21,8 +21,8 @@ const CommentList = ({ article_id }) => {
   return (
     <>
       <PostComment article_id={article_id} setCommentList={setCommentList} />
+      <h3 className={styles["comment-list-title"]}>Comments</h3>
       <section className={styles["comment-list"]}>
-        <h3 className={styles["comment-list-title"]}>Comments</h3>
         {commentList.length === 0 ? (
           <p>No comments to display</p>
         ) : (

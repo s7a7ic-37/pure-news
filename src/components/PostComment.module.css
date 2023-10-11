@@ -32,6 +32,11 @@ textarea {
   margin: 0.5rem 0;
 }
 
+textarea:focus {
+  outline: none;
+  border: 1px solid #76d7c4;
+}
+
 .add-comment-button:disabled {
   background-color: #ccc;
   cursor: not-allowed;

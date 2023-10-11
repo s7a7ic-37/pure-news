@@ -1,4 +1,3 @@
-import { useState } from "react";
 import styles from "./CommentCard.module.css";
 
 const CommentCard = ({ body, author, votes, created_at }) => {
@@ -6,10 +5,14 @@ const CommentCard = ({ body, author, votes, created_at }) => {
 
   return (
     <>
-      <h4 className={styles["comment-author"]}>{author}</h4>
-      <p className={styles["comment-date"]}>{formattedDate}</p>
-      <article className={styles["comment-body"]}>{body}</article>
-      <p className={styles["comment-votes"]}>Votes: {votes}</p>
+      <div className={styles["comment-author-date-box"]}>
+        <p className={styles["comment-author"]}>{author}</p>
+        <p className={styles["comment-date"]}>{formattedDate}</p>
+      </div>
+      <div className={styles["comment-body-votes-box"]}>
+        <article className={styles["comment-body"]}>{body}</article>
+        <p className={styles["comment-votes"]}>Votes: {votes}</p>
+      </div>
     </>
   );
 };

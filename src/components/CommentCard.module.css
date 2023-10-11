@@ -1,17 +1,24 @@
-.comment-author {
-  font-weight: bold;
+.comment-author-date-box {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.comment-body-votes-box {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 
-.comment-date {
+.comment-author,
+.comment-date,
+.comment-votes {
+  font-size: 0.9rem;
   color: #777;
-  font-size: 0.8rem;
+  margin: 0;
 }
 
 .comment-body {
   margin-top: 1rem;
-}
-
-.comment-votes {
-  color: #888;
-  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  font-size: 1rem;
 }
