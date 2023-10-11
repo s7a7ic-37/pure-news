@@ -39,9 +39,6 @@ const ArticleList = () => {
   return (
     <main className={styles["article-list"]}>
       <h2 className={styles["article-list-title"]}>Popular articles</h2>
-      <label htmlFor="topicSelect" className={styles["dropdown-label"]}>
-        Select a topic:
-      </label>
       <select
         id="topicSelect"
         className={styles.dropdown}
@@ -49,14 +46,11 @@ const ArticleList = () => {
         value={topicSelected}
         onChange={handleTopicChange}
       >
-        <option value="">ALL</option>
+        <option value="">TOPIC</option>
         <option value="coding">TECHNOLOGY</option>
         <option value="cooking">COOKING</option>
         <option value="football">SPORTS</option>
       </select>
-      <label htmlFor="sortSelect" className={styles["dropdown-label"]}>
-        Sort by:
-      </label>
       <select
         id="sortSelect"
         className={styles.dropdown}
@@ -64,6 +58,7 @@ const ArticleList = () => {
         value={sortBySelected}
         onChange={handleSortByChange}
       >
+        <option value="">SORT BY</option>
         <option value="created_at">DATE</option>
         <option value="title">TITLE</option>
         <option value="author">AUTHOR</option>
