@@ -10,7 +10,7 @@
 }
 .dropdown {
   margin-left: 1rem;
-  padding: 0.5rem;
+  padding: 0.4rem 0rem 0.4rem 0rem;
   font-size: 0.8rem;
   color: #000000;
   border: none;
@@ -22,7 +22,7 @@
 }
 
 .order-button {
-  padding: 0.5rem 1rem;
+  padding: 0.45rem 1rem 0.45rem 1rem;
   margin-left: 1rem;
   font-size: 0.8rem;
   background-color: #ffffff;
@@ -55,4 +55,5 @@
 
 .article-card-link {
   text-decoration: none;
+
 }

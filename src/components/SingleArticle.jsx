@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { fetchArticleById } from "../utils/utils";
 import SingleArticleCard from "./SingleArticleCard";
 import CommentList from "./CommentList";
+import styles from "./SingleArticle.module.css";
 
 const SingleArticle = () => {
   const [presentArticle, setPresentArticle] = useState({});
@@ -20,7 +21,7 @@ const SingleArticle = () => {
   if (isLoading) return <h2>Your page is loading...</h2>;
 
   return (
-    <main className="single-article-card">
+    <main className={styles["single-article-card"]}>
       <SingleArticleCard presentArticle={presentArticle} />
       <CommentList article_id={article_id} />
     </main>
