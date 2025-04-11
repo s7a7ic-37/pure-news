@@ -12,7 +12,7 @@ Welcome to Pure News, a platform where you can stay informed, engage in discussi
 
 ## Deployment
 
-You can access the deployed version of Pure News [here](https://pure-news.ideanexus.uk).
+You can access the deployed version of Pure News [here](https://pure-news.netlify.app/).
 
 ## Description
 
