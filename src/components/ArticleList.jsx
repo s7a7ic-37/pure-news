@@ -6,35 +6,43 @@ import styles from "./ArticleList.module.css";
 
 const ArticleList = () => {
   const [articleList, setArticleList] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [retryCount, setRetryCount] = useState(0);
   const [topicSelected, setTopicSelected] = useState("");
   const [sortBySelected, setSortBySelected] = useState("");
   const [orderSelected, setOrderSelected] = useState("");
 
   useEffect(() => {
+    let isCurrentRequest = true;
     setIsLoading(true);
-    fetchAllArticles(topicSelected, sortBySelected, orderSelected).then(
-      ({ articles }) => {
-        setArticleList(articles);
-        setIsLoading(false);
-      }
-    );
-  }, [topicSelected, sortBySelected, orderSelected]);
+    setError("");
 
-  const handleTopicChange = (event) => {
-    setTopicSelected(event.target.value);
-  };
+    fetchAllArticles(topicSelected, sortBySelected, orderSelected)
+      .then(({ articles }) => {
+        if (!Array.isArray(articles)) throw new Error("Invalid articles response");
+        if (isCurrentRequest) setArticleList(articles);
+      })
+      .catch(() => {
+        if (isCurrentRequest) {
+          setArticleList([]);
+          setError("Articles could not be loaded. The news service may be unavailable.");
+        }
+      })
+      .finally(() => {
+        if (isCurrentRequest) setIsLoading(false);
+      });
 
-  const handleSortByChange = (event) => {
-    setSortBySelected(event.target.value);
-  };
+    return () => {
+      isCurrentRequest = false;
+    };
+  }, [topicSelected, sortBySelected, orderSelected, retryCount]);
 
   const toggleOrder = () => {
-    const newOrder = orderSelected === "asc" ? "desc" : "asc";
-    setOrderSelected(newOrder);
+    setOrderSelected((order) => (order === "asc" ? "desc" : "asc"));
   };
 
-  if (isLoading) return <h2>Your page is loading...</h2>;
+  if (isLoading) return <h2 role="status">Articles are loading…</h2>;
 
   return (
     <main className={styles["article-list"]}>
@@ -44,7 +52,8 @@ const ArticleList = () => {
         className={styles.dropdown}
         name="topicSelected"
         value={topicSelected}
-        onChange={handleTopicChange}
+        onChange={(event) => setTopicSelected(event.target.value)}
+        aria-label="Filter articles by topic"
       >
         <option value="">TOPIC</option>
         <option value="coding">TECHNOLOGY</option>
@@ -56,7 +65,8 @@ const ArticleList = () => {
         className={styles.dropdown}
         name="sortBySelected"
         value={sortBySelected}
-        onChange={handleSortByChange}
+        onChange={(event) => setSortBySelected(event.target.value)}
+        aria-label="Sort articles by"
       >
         <option value="">SORT BY</option>
         <option value="created_at">DATE</option>
@@ -68,18 +78,26 @@ const ArticleList = () => {
       <button className={styles["order-button"]} onClick={toggleOrder}>
         ORDER {orderSelected === "asc" ? "↑" : "↓"}
       </button>
-      <ul className={styles["article-card-list"]}>
-        {articleList.map((article) => (
-          <li key={article.article_id} className={styles["article-card"]}>
-            <Link
-              to={`/articles/${article.article_id}`}
-              className={styles["article-card-link"]}
-            >
-              <ArticleCard {...article} />
-            </Link>
-          </li>
-        ))}
-      </ul>
+      {error ? (
+        <p role="alert">
+          {error} <button type="button" onClick={() => setRetryCount((count) => count + 1)}>Retry</button>
+        </p>
+      ) : articleList.length === 0 ? (
+        <p>No articles match this selection.</p>
+      ) : (
+        <ul className={styles["article-card-list"]}>
+          {articleList.map((article) => (
+            <li key={article.article_id} className={styles["article-card"]}>
+              <Link
+                to={"/articles/" + article.article_id}
+                className={styles["article-card-link"]}
+              >
+                <ArticleCard {...article} />
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
     </main>
   );
 };

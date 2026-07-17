@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { updateArticleVotes } from "../utils/utils";
+import { getVoteUpdate } from "../utils/votes";
 import styles from "./SingleArticleCard.module.css";
 
 const SingleArticleCard = ({ presentArticle }) => {
@@ -17,57 +18,31 @@ const SingleArticleCard = ({ presentArticle }) => {
 
   const [newVotes, setNewVotes] = useState(votes);
   const [voteChange, setVoteChange] = useState(0);
-  const [hasUpVoted, setHasUpVoted] = useState(false);
-  const [hasDownVoted, setHasDownVoted] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
   const [isError, setIsError] = useState(false);
 
-  const upVote = () => {
-    setHasDownVoted(false);
-    if (voteChange === 0 || voteChange === -1) {
-      const updatedVotes = newVotes + 1;
-      setNewVotes(updatedVotes);
-      setIsError(false);
+  const castVote = async (direction) => {
+    if (isUpdating) return;
+    const { nextChange, delta } = getVoteUpdate(voteChange, direction);
+    if (!delta) return;
 
-      updateArticleVotes(article_id, { inc_votes: 1 }).catch(() => {
-        setIsError(true);
-      });
-      if (voteChange === 0) {
-        setVoteChange(1);
-      } else {
-        setVoteChange(0);
-      }
-    } else {
-      setHasUpVoted(true);
+    const previousVotes = newVotes;
+    const previousChange = voteChange;
+    setNewVotes(previousVotes + delta);
+    setVoteChange(nextChange);
+    setIsError(false);
+    setIsUpdating(true);
+
+    try {
+      await updateArticleVotes(article_id, { inc_votes: delta });
+    } catch {
+      setNewVotes(previousVotes);
+      setVoteChange(previousChange);
+      setIsError(true);
+    } finally {
+      setIsUpdating(false);
     }
   };
-
-  const downVote = () => {
-    setHasUpVoted(false);
-    if (voteChange === 0 || voteChange === 1) {
-      setHasUpVoted(false);
-      const updatedVotes = newVotes - 1;
-      setNewVotes(updatedVotes);
-      setIsError(false);
-
-      updateArticleVotes(article_id, { inc_votes: -1 }).catch(() => {
-        setIsError(true);
-      });
-      if (voteChange === 0) {
-        setVoteChange(-1);
-      } else {
-        setVoteChange(0);
-      }
-    } else {
-      setHasDownVoted(true);
-    }
-  };
-
-  const upVoteButtonClassName = `vote-button ${
-    hasUpVoted ? "highlight-button" : ""
-  }`;
-  const downVoteButtonClassName = `vote-button ${
-    hasDownVoted ? "highlight-button" : ""
-  }`;
 
   return (
     <section
@@ -89,42 +64,32 @@ const SingleArticleCard = ({ presentArticle }) => {
         />
         <div className={styles["vote-box"]}>
           <button
-            className={`${styles["vote-button"]} ${
-              hasUpVoted ? styles["highlight-button"] : ""
-            }`}
-            onClick={upVote}
-            disabled={hasUpVoted}
+            type="button"
+            className={styles["vote-button"]}
+            onClick={() => castVote(1)}
+            disabled={isUpdating}
+            aria-pressed={voteChange === 1}
+            aria-label="Upvote article"
           >
             +
           </button>
           <p className={styles["article-votes"]}>Votes: {newVotes}</p>
           <button
-            className={`${styles["vote-button"]} ${
-              hasDownVoted ? styles["highlight-button"] : ""
-            }`}
-            onClick={downVote}
-            disabled={hasDownVoted}
+            type="button"
+            className={styles["vote-button"]}
+            onClick={() => castVote(-1)}
+            disabled={isUpdating}
+            aria-pressed={voteChange === -1}
+            aria-label="Downvote article"
           >
             -
           </button>
         </div>
-        <div className={styles["error-message-container"]}>
-          {hasUpVoted && (
-            <h3 className={styles["error-message"]}>
-              You have already up-voted
-            </h3>
-          )}
-          {hasDownVoted && (
-            <h3 className={styles["error-message"]}>
-              You have already down-voted
-            </h3>
-          )}
-          {isError && (
-            <p className={styles["error-message"]}>
-              Error has occurred, please try again later
-            </p>
-          )}
-        </div>
+        {isError && (
+          <p className={styles["error-message"]} role="alert">
+            Your vote could not be saved. Please try again.
+          </p>
+        )}
       </div>
     </section>
   );

@@ -1,7 +1,9 @@
 import axios from "axios";
 
 const apiUrl = axios.create({
-  baseURL: `https://pure-news-api-1.onrender.com/api`,
+  baseURL:
+    import.meta.env?.VITE_API_URL ||
+    "https://pure-news-api-1.onrender.com/api",
 });
 
 export const fetchAllArticles = (topic, sortBy, order) => {
@@ -10,53 +12,19 @@ export const fetchAllArticles = (topic, sortBy, order) => {
   if (sortBy) params.append("sort_by", sortBy);
   if (order) params.append("order", order);
 
-  return apiUrl
-    .get(`/articles?${params}`)
-    .then(({ data }) => {
-      return data;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  return apiUrl.get("/articles?" + params).then(({ data }) => data);
 };
 
-export const fetchArticleById = (article_id) => {
-  return apiUrl
-    .get(`/articles/${article_id}`)
-    .then(({ data }) => {
-      return data;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};
+export const fetchArticleById = (article_id) =>
+  apiUrl.get("/articles/" + article_id).then(({ data }) => data);
 
-export const fetchCommentsByArticle = (article_id) => {
-  return apiUrl
-    .get(`/articles/${article_id}/comments`)
-    .then(({ data }) => {
-      return data;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};
+export const fetchCommentsByArticle = (article_id) =>
+  apiUrl.get("/articles/" + article_id + "/comments").then(({ data }) => data);
 
-export const updateArticleVotes = (article_id, voteChange) => {
-  return apiUrl
-    .patch(`/articles/${article_id}`, voteChange)
-    .then(({ data }) => {
-      return data;
-    });
-};
+export const updateArticleVotes = (article_id, voteChange) =>
+  apiUrl.patch("/articles/" + article_id, voteChange).then(({ data }) => data);
 
-export const addComment = (article_id, username, body) => {
-  return apiUrl
-    .post(`/articles/${article_id}/comments`, {
-      username: username,
-      body: body,
-    })
-    .then(({ data }) => {
-      return data.comment[0];
-    });
-};
+export const addComment = (article_id, username, body) =>
+  apiUrl
+    .post("/articles/" + article_id + "/comments", { username, body })
+    .then(({ data }) => data.comment[0]);

@@ -76,7 +76,7 @@ const PostComment = ({ article_id, setCommentList }) => {
       </form>
       <div className={styles["message-container"]}>
         {isError && (
-          <p className={styles["error-message"]}>
+          <p className={styles["error-message"]} role="alert">
             Error has occurred, please try again later
           </p>
         )}
