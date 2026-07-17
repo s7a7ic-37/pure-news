@@ -12,7 +12,7 @@ const Nav = () => {
         Homepage
       </Link>
       <p>
-        <b>Logged in as:</b> {user}
+        <b>Demo user:</b> {user}
       </p>
     </nav>
   );

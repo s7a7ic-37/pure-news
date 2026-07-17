@@ -15,7 +15,9 @@ Run the vote-delta checks with npm test. The frontend reverses an optimistic vot
 
 ## Live status
 
-The frontend is hosted at https://pure-news.netlify.app. On 30 October 2026 the API route catalogue responded, but topics and article routes returned HTTP 500. The exact production cause is not confirmed. The app now presents a readable error and retry instead of trying to render missing data.
+The frontend is hosted at https://pure-news.netlify.app. Restored on 30 October 2026: the API's old database had been paused beyond dashboard restoration. A replacement Supabase database now serves the original public sample articles and comments. Article, topic, comment and user reads were verified successfully. The frontend retains readable errors and retry controls for future outages.
+
+This is a public learning demo, with sample usernames rather than real authentication. Use the sample username weegembump to try commenting; do not enter personal information. The free API instance may take about a minute to wake after inactivity.
 
 ## Source
 
