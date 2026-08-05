@@ -8,21 +8,27 @@ import styles from "./SingleArticle.module.css";
 const SingleArticle = () => {
   const [presentArticle, setPresentArticle] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState("");
+  const [retryCount, setRetryCount] = useState(0);
   const { article_id } = useParams();
 
   useEffect(() => {
     let isCurrentRequest = true;
     setIsLoading(true);
-    setError(false);
+    setError("");
     setPresentArticle(null);
 
     fetchArticleById(article_id)
       .then(({ article }) => {
         if (isCurrentRequest) setPresentArticle(article);
       })
-      .catch(() => {
-        if (isCurrentRequest) setError(true);
+      .catch((failure) => {
+        if (isCurrentRequest)
+          setError(
+            [400, 404].includes(failure.response?.status)
+              ? "missing"
+              : "unavailable",
+          );
       })
       .finally(() => {
         if (isCurrentRequest) setIsLoading(false);
@@ -31,14 +37,32 @@ const SingleArticle = () => {
     return () => {
       isCurrentRequest = false;
     };
-  }, [article_id]);
+  }, [article_id, retryCount]);
 
-  if (isLoading) return <h2 role="status">Article is loading…</h2>;
+  if (isLoading)
+    return (
+      <main className={styles["single-article-card"]}>
+        <h2 role="status">Article is loading…</h2>
+        <p>The free demo API can take about a minute to wake.</p>
+      </main>
+    );
 
   if (error || !presentArticle) {
     return (
       <main className={styles["single-article-card"]}>
-        <p role="alert">This article could not be loaded right now.</p>
+        <p role="alert">
+          {error === "missing"
+            ? "This article does not exist. Check the link or browse the article list."
+            : "This article could not be loaded right now."}
+        </p>
+        {error !== "missing" && (
+          <button
+            type="button"
+            onClick={() => setRetryCount((count) => count + 1)}
+          >
+            Retry article
+          </button>
+        )}
         <Link to="/home">Back to articles</Link>
       </main>
     );

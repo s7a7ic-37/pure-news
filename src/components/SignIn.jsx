@@ -4,8 +4,8 @@ import { UserContext } from "../contexts/UserContext";
 import styles from "./SignIn.module.css";
 
 const SignIn = () => {
-  const [signInInput, setSignInInput] = useState("");
-  const { setUser } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
+  const [signInInput, setSignInInput] = useState(user);
   const navigate = useNavigate();
 
   const handleChange = (event) => {
@@ -14,7 +14,7 @@ const SignIn = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setUser(signInInput.trim() || "weegembump");
+    setUser(signInInput);
     navigate("/home");
   };
 
@@ -22,18 +22,33 @@ const SignIn = () => {
     <div className={styles["sign-in-box"]}>
       <form onSubmit={handleSubmit} className={styles["form-container"]}>
         <label htmlFor="sign-in" className={styles.label}>
-          Choose a demo username. This sample sign-in is not authentication.
+          Choose a sample identity. This is not account sign-in.
         </label>
-        <input
-          type="text"
+        <select
           id="sign-in"
           required
           value={signInInput}
           onChange={handleChange}
-          placeholder="weegembump"
           className={styles.input}
-        />
-          <button type="submit" className={styles.button}>
+        >
+          {[
+            "weegembump",
+            "jessjelly",
+            "grumpy19",
+            "tickle122",
+            "cooljmessy",
+            "happyamy2016",
+          ].map((username) => (
+            <option key={username} value={username}>
+              {username}
+            </option>
+          ))}
+        </select>
+        <p>
+          All six names belong to the public sample dataset. Do not post
+          personal information.
+        </p>
+        <button type="submit" className={styles.button}>
           Continue
         </button>
       </form>

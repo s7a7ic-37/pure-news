@@ -12,6 +12,8 @@ const ArticleCard = ({
       <h3 className={styles["article-title"]}>{title}</h3>
       <p className={styles["article-author"]}>By: {author}</p>
       <img
+        loading="lazy"
+        decoding="async"
         src={article_img_url}
         alt={title}
         className={styles["article-image"]}

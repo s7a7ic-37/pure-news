@@ -1,3 +1,7 @@
 :root {
   font-family: "Trebuchet MS";
 }
+
+* { box-sizing: border-box; }
+:focus-visible { outline: 3px solid #175d92 !important; outline-offset: 3px; }
+button, select { font: inherit; }

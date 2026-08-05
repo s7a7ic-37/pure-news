@@ -11,13 +11,13 @@ Requirements: Node.js and a running Pure News API.
 
 By default the frontend uses the original hosted API at https://pure-news-api-1.onrender.com/api. To use another API, set VITE_API_URL to its base path, including /api, before starting Vite.
 
-Run the vote-delta checks with npm test. The frontend reverses an optimistic vote if the API rejects the update and shows retryable error states when data cannot be loaded.
+Run the vote and API-client checks with npm test. The frontend reverses an optimistic vote if the API rejects the update and shows retryable error states when data cannot be loaded. API-client tests also check query encoding, comment-response validation and error propagation without making network requests.
 
 ## Live status
 
 The frontend is hosted at https://pure-news.netlify.app. The API's old database had been paused beyond dashboard restoration. A replacement Supabase database now serves the original public sample articles and comments. Article, topic, comment and user reads were verified successfully. The frontend retains readable errors and retry controls for future outages.
 
-This is a public learning demo, with sample usernames rather than real authentication. Use the sample username weegembump to try commenting; do not enter personal information. The free API instance may take about a minute to wake after inactivity.
+Articles open immediately. This is a public learning demo, with sample identities rather than real authentication. The default identity is weegembump; Switch in the navigation opens the six sample choices. Do not enter personal information. The free API instance may take about a minute to wake after inactivity. Requests time out after 90 seconds, and article failures have a retry control; missing articles have a separate message.
 
 ## Source
 

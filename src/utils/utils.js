@@ -1,9 +1,9 @@
 import axios from "axios";
 
 const apiUrl = axios.create({
+  timeout: 90000,
   baseURL:
-    import.meta.env?.VITE_API_URL ||
-    "https://pure-news-api-1.onrender.com/api",
+    import.meta.env?.VITE_API_URL || "https://pure-news-api-1.onrender.com/api",
 });
 
 export const fetchAllArticles = (topic, sortBy, order) => {
@@ -27,4 +27,9 @@ export const updateArticleVotes = (article_id, voteChange) =>
 export const addComment = (article_id, username, body) =>
   apiUrl
     .post("/articles/" + article_id + "/comments", { username, body })
-    .then(({ data }) => data.comment[0]);
+    .then(({ data }) => {
+      const comment = data.comment?.[0];
+      if (!comment || !Number.isInteger(comment.comment_id))
+        throw new Error("Invalid comment response");
+      return comment;
+    });

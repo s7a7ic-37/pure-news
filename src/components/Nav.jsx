@@ -12,8 +12,9 @@ const Nav = () => {
         Homepage
       </Link>
       <p>
-        <b>Demo user:</b> {user}
+        <b>Demo identity:</b> {user} · <Link to="/demo-user">Switch</Link>
       </p>
+      <small>Public sample data · identities are not authenticated</small>
     </nav>
   );
 };

@@ -1,5 +1,8 @@
 .article-list {
-  margin-top: 9rem;
+  margin-top: 2rem;
+  width: min(1180px, calc(100% - 2rem));
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .article-list-title {
@@ -35,6 +38,9 @@
 }
 
 .article-card-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr));
+  gap: 1.2rem;
   list-style: none;
   padding: 0;
 }
@@ -43,15 +49,17 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 45%;
+  min-width: 0;
   padding: 1rem;
   border: 1px solid #e0e0e0;
-  margin: 1rem;
+  margin: 0;
   border-radius: 0.5rem;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .article-card-link {
   text-decoration: none;
+  color: inherit;
+  width: 100%;
 
 }

@@ -42,7 +42,7 @@ const ArticleList = () => {
     setOrderSelected((order) => (order === "asc" ? "desc" : "asc"));
   };
 
-  if (isLoading) return <h2 role="status">Articles are loading…</h2>;
+  if (isLoading) return <main className={styles["article-list"]}><h2 role="status">Articles are loading…</h2><p>The free demo API can take about a minute to wake.</p></main>;
 
   return (
     <main className={styles["article-list"]}>

@@ -6,11 +6,20 @@
   color: #000000;
   padding-left: 1.3em;
   padding-right: 1.3em;
-  position: fixed;
-  top: 4.7rem;
+  position: sticky;
+  top: 0;
   left: 0;
   right: 0;
+  flex-wrap: wrap;
+  gap: 0.3rem 1rem;
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
+  z-index: 2;
 }
+
+.nav p { margin: 0; font-size: 0.85rem; }
+.nav small { flex-basis: 100%; font-size: 0.7rem; }
+.nav a { color: #102f29; text-underline-offset: 3px; }
 
 .link-homepage {
   color: #000000;

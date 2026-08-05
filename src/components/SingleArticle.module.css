@@ -1,3 +1,6 @@
 .single-article-card {
-  margin-top: 9rem;
+  margin-top: 2rem;
+  width: min(850px, 100%);
+  margin-left: auto;
+  margin-right: auto;
 }
