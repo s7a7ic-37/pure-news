@@ -1,4 +1,4 @@
 .comment-author-date-box { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 18px; }
 .comment-author, .comment-date, .comment-votes { font-size: 11px; color: var(--muted); margin: 0; }
-.comment-author { color: var(--green); font-weight: 700; }
+.comment-author { color: var(--accent); font-weight: 700; }
 .comment-body { margin: 16px 0; font-size: 15px; line-height: 1.75; }

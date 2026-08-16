@@ -28,3 +28,7 @@ Articles open immediately. This is a public learning demo, with sample identitie
 - Frontend: https://github.com/s7a7ic-37/pure-news
 - Backend: https://github.com/s7a7ic-37/pure-news-api
 - Backend setup, database requirements, and API endpoints are documented in the API repository.
+
+## Visual identity
+
+The editorial interface has a warm burgundy identity, with a matching N tab mark in SVG/PNG/ICO formats and an Apple touch icon. The API serves the same ICO at its browser root. No external font or icon service is required.
