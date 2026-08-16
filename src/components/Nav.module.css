@@ -19,7 +19,7 @@
 
 .nav p { margin: 0; font-size: 0.85rem; }
 .nav small { flex-basis: 100%; font-size: 0.7rem; }
-.nav a { color: #102f29; text-underline-offset: 3px; }
+.nav a { display: inline-flex; align-items: center; min-height: 44px; color: #102f29; text-underline-offset: 3px; }
 
 .link-homepage {
   color: #000000;

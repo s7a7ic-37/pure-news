@@ -17,6 +17,8 @@ Run the vote and API-client checks with npm test. The frontend reverses an optim
 
 The frontend is hosted at https://pure-news.netlify.app. The API's old database had been paused beyond dashboard restoration. A replacement Supabase database now serves the original public sample articles and comments. Article, topic, comment and user reads were verified successfully. The frontend retains readable errors and retry controls for future outages.
 
+Netlify publishes Vite's `dist` directory. Keep the SPA fallback in `public/_redirects` so Vite copies it into that directory; direct article links and browser refreshes must serve `index.html`. CI checks that this routing file is included in the build.
+
 Articles open immediately. This is a public learning demo, with sample identities rather than real authentication. The default identity is weegembump; Switch in the navigation opens the six sample choices. Do not enter personal information. The free API instance may take about a minute to wake after inactivity. Requests time out after 90 seconds, and article failures have a retry control; missing articles have a separate message.
 
 ## Source

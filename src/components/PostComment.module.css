@@ -10,6 +10,8 @@
   background-color: #fff;
 }
 
+.submit-comment form { width: 100%; min-width: 0; }
+
 .new-comment-label {
   font-size: 0.9rem;
 }

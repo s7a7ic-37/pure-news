@@ -5,3 +5,9 @@
 * { box-sizing: border-box; }
 :focus-visible { outline: 3px solid #175d92 !important; outline-offset: 3px; }
 button, select { font: inherit; }
+button, select { min-height: 44px; }
+button { min-width: 44px; }
+article { overflow-wrap: anywhere; }
+@media (max-width: 760px) {
+  input, select, textarea { font-size: 16px !important; }
+}

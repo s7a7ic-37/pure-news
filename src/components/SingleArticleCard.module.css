@@ -23,6 +23,8 @@
 }
 .post-data-box {
   display: flex;
+  flex-wrap: wrap;
+  gap: 0 1rem;
   justify-content: space-between;
   width: 100%;
 }

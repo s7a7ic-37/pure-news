@@ -10,8 +10,7 @@
   margin: 1rem;
 }
 .dropdown {
-  margin-left: 1rem;
-  padding: 0.4rem 0rem 0.4rem 0rem;
+  padding: 0.5rem;
   font-size: 0.8rem;
   color: #000000;
   border: none;
@@ -24,7 +23,6 @@
 
 .order-button {
   padding: 0.45rem 1rem 0.45rem 1rem;
-  margin-left: 1rem;
   font-size: 0.8rem;
   background-color: #ffffff;
   border: none;
@@ -36,6 +34,8 @@
 .order-button:hover {
   background-color: #f0f0f0;
 }
+
+.filters { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 
 .article-card-list {
   display: grid;
