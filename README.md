@@ -13,6 +13,8 @@ By default the frontend uses the original hosted API at https://pure-news-api-1.
 
 Run the vote and API-client checks with npm test. The frontend reverses an optimistic vote if the API rejects the update and shows retryable error states when data cannot be loaded. API-client tests also check query encoding, comment-response validation and error propagation without making network requests.
 
+The reading-room interface uses the original React/Vite stack with CSS modules and system fonts. Topic, sort order and page live in URL parameters, so a URL can be shared or refreshed and browser Back restores the selection. Article links carry the browsing query to the return link. Invalid URL values fall back to known defaults. Changing a filter resets the page. The client requests 12 articles at a time from the API and uses filtered totals to disable unavailable pages; an out-of-range page offers a first-page recovery control. Pagination returns keyboard focus to the results heading. Filters remain available while a request is loading.
+
 ## Live status
 
 The frontend is hosted at https://pure-news.netlify.app. The API's old database had been paused beyond dashboard restoration. A replacement Supabase database now serves the original public sample articles and comments. Article, topic, comment and user reads were verified successfully. The frontend retains readable errors and retry controls for future outages.

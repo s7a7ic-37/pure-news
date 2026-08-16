@@ -1,20 +1,3 @@
-.comment-card-list {
-  list-style: none;
-  padding: 0;
-}
-
-.comment-list-title {
-  font-size: 1.1rem;
-  margin: 1rem;
-}
-
-.comment-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 1rem;
-  margin: 1rem;
-  border: 1px solid #e0e0e0;
-  border-radius: 0.5rem;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
+.comment-card-list { list-style: none; padding: 0; }
+.comment-list-title { font: 500 30px Georgia, serif; margin: 36px 0 18px; }
+.comment-card { padding: 24px 0; border-top: 1px solid var(--line); }

@@ -1,11 +1,5 @@
-body {
-  margin: 0;
-  padding: 0;
-  background-color: #ffffff;
-}
-
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-}
+.container { min-height: 100vh; }
+.footer { width: min(1180px, calc(100% - 40px)); margin: 70px auto 0; padding: 32px 0; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; align-items: start; gap: 16px 24px; color: var(--muted); font-size: 12px; line-height: 1.6; }
+.footer strong { font: 700 24px Georgia, serif; color: var(--ink); }
+.footer p { max-width: 510px; margin: 0 auto 0 0; }
+.footer a { display: inline-flex; align-items: center; min-height: 44px; }

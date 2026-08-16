@@ -13,11 +13,13 @@ test("article filters remain URL parameters and requests have a cold-start timeo
     const url = new URL(config.url, config.baseURL);
     assert.equal(url.searchParams.get("topic"), "cooking&order=desc");
     assert.equal(url.searchParams.get("order"), "asc");
+    assert.equal(url.searchParams.get("p"), "2");
+    assert.equal(url.searchParams.get("limit"), "12");
     assert.equal(config.timeout, 90000);
     return { data: { articles: [] }, status: 200, config };
   };
   assert.deepEqual(
-    await fetchAllArticles("cooking&order=desc", "votes", "asc"),
+    await fetchAllArticles("cooking&order=desc", "votes", "asc", 2),
     { articles: [] },
   );
 });

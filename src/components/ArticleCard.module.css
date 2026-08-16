@@ -1,31 +1,8 @@
-.article-title {
-  font-size: 1.2rem;
-  margin: 0.5rem 0;
-}
-
-.article-author {
-  font-size: 0.9rem;
-  color: #777;
-  margin: 0;
-  margin-bottom: 0.5rem;
-}
-
-.article-image {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  max-height: 260px;
-  object-fit: cover;
-}
-
-.article-metadata {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-}
-
-.article-votes,
-.article-comment-count {
-  font-size: 0.9rem;
-  color: #777;
-  margin-top: 1rem;
-}
+.article-image { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; background: #e3e9dd; }
+.copy { padding: 22px; }
+.kicker { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; font-size: 10px; color: var(--muted); }
+.kicker span { color: var(--green); font-weight: 750; text-transform: uppercase; letter-spacing: .08em; }
+.article-title { margin: 14px 0 12px; font: 500 24px/1.18 Georgia, serif; letter-spacing: -.025em; }
+.article-author { font-size: 11px; color: var(--muted); margin: 0; }
+.article-metadata { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; border-top: 1px solid var(--line); margin-top: 24px; padding-top: 14px; }
+.article-votes, .article-comment-count { font-size: 11px; color: var(--muted); margin: 0; }

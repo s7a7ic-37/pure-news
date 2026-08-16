@@ -9,12 +9,12 @@ const Nav = () => {
   return (
     <nav className={styles.nav}>
       <Link to="/home" className={styles["link-homepage"]}>
-        Homepage
+        All stories
       </Link>
       <p>
-        <b>Demo identity:</b> {user} · <Link to="/demo-user">Switch</Link>
+        <span className={styles.identity}>Reading as <b>{user}</b></span> <Link to="/demo-user">Switch identity ↗</Link>
       </p>
-      <small>Public sample data · identities are not authenticated</small>
+      <small>Public sample data · no authenticated accounts</small>
     </nav>
   );
 };

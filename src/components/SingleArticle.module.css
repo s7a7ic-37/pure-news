@@ -1,6 +1,2 @@
-.single-article-card {
-  margin-top: 2rem;
-  width: min(850px, 100%);
-  margin-left: auto;
-  margin-right: auto;
-}
+.single-article-card { width: min(850px, calc(100% - 40px)); margin: 32px auto 0; }
+.single-article-card > a { display: inline-flex; align-items: center; min-height: 44px; font-size: 13px; font-weight: 650; }

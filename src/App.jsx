@@ -33,6 +33,7 @@ function App() {
             />
           </Routes>
         </div>
+        <footer className={styles.footer}><strong>Pure News.</strong><p>A learning project with public sample data. Sample identities are not authentication. Please keep personal information out of comments.</p><a href="https://github.com/s7a7ic-37/pure-news">Source ↗</a><a href="https://portfolio.artemislab.co.uk/">Maksymilian’s portfolio ↗</a></footer>
       </div>
     </UserContext.Provider>
   );

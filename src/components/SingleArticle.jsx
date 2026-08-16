@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { fetchArticleById } from "../utils/utils";
 import SingleArticleCard from "./SingleArticleCard";
 import CommentList from "./CommentList";
@@ -11,6 +11,8 @@ const SingleArticle = () => {
   const [error, setError] = useState("");
   const [retryCount, setRetryCount] = useState(0);
   const { article_id } = useParams();
+  const { state } = useLocation();
+  const backToArticles = { pathname: "/", search: state?.browseSearch || "" };
 
   useEffect(() => {
     let isCurrentRequest = true;
@@ -63,13 +65,14 @@ const SingleArticle = () => {
             Retry article
           </button>
         )}
-        <Link to="/home">Back to articles</Link>
+        <Link to={backToArticles}>Back to articles</Link>
       </main>
     );
   }
 
   return (
     <main className={styles["single-article-card"]}>
+      <Link to={backToArticles}>← Back to these articles</Link>
       <SingleArticleCard key={article_id} presentArticle={presentArticle} />
       <CommentList key={article_id} article_id={article_id} />
     </main>

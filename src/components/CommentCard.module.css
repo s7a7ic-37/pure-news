@@ -1,26 +1,4 @@
-.comment-author-date-box {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 1rem;
-  justify-content: space-between;
-  width: 100%;
-}
-.comment-body-votes-box {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-.comment-author,
-.comment-date,
-.comment-votes {
-  font-size: 0.9rem;
-  color: #777;
-  margin: 0;
-}
-
-.comment-body {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  font-size: 1rem;
-}
+.comment-author-date-box { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 18px; }
+.comment-author, .comment-date, .comment-votes { font-size: 11px; color: var(--muted); margin: 0; }
+.comment-author { color: var(--green); font-weight: 700; }
+.comment-body { margin: 16px 0; font-size: 15px; line-height: 1.75; }

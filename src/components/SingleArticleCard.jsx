@@ -14,7 +14,7 @@ const SingleArticleCard = ({ presentArticle }) => {
     votes,
     article_img_url,
   } = presentArticle;
-  const formattedDate = new Date(created_at).toLocaleString();
+  const formattedDate = new Date(created_at).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
 
   const [newVotes, setNewVotes] = useState(votes);
   const [voteChange, setVoteChange] = useState(0);
@@ -50,18 +50,18 @@ const SingleArticleCard = ({ presentArticle }) => {
       className={styles["article-card-container"]}
     >
       <div className={styles["article-card-info"]}>
-        <h2 className={styles["article-title"]}>{title}</h2>
         <p className={styles["article-topic"]}>{topic}</p>
+        <h2 className={styles["article-title"]}>{title}</h2>
         <div className={styles["post-data-box"]}>
           <p className={styles["article-author"]}>{author}</p>
           <p className={styles["article-date"]}>{formattedDate}</p>
         </div>
-        <article className={styles["article-body"]}>{body}</article>
         <img
           className={styles["article-image"]}
           src={article_img_url}
-          alt={title}
+          alt=""
         />
+        <article className={styles["article-body"]}>{body}</article>
         <div className={styles["vote-box"]}>
           <button
             type="button"

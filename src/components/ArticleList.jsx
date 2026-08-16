@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { fetchAllArticles } from "../utils/utils";
 import ArticleCard from "./ArticleCard";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
+import { readArticleQuery, updateArticleQuery } from "../utils/articleQuery";
 import styles from "./ArticleList.module.css";
 
 const ArticleList = () => {
@@ -9,22 +10,34 @@ const ArticleList = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [retryCount, setRetryCount] = useState(0);
-  const [topicSelected, setTopicSelected] = useState("");
-  const [sortBySelected, setSortBySelected] = useState("");
-  const [orderSelected, setOrderSelected] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { topic: topicSelected, sortBy: sortBySelected, order: orderSelected, page } = readArticleQuery(searchParams);
+  const [totalCount, setTotalCount] = useState(0);
+  const headingRef = useRef(null);
+  const pageChangeRequested = useRef(false);
+  const updateQuery = (key, value) => setSearchParams(updateArticleQuery(searchParams, key, value));
+  const goToPage = (value) => { pageChangeRequested.current = true; updateQuery("p", String(value)); };
 
   useEffect(() => {
     let isCurrentRequest = true;
     setIsLoading(true);
     setError("");
 
-    fetchAllArticles(topicSelected, sortBySelected, orderSelected)
-      .then(({ articles }) => {
-        if (!Array.isArray(articles)) throw new Error("Invalid articles response");
-        if (isCurrentRequest) setArticleList(articles);
+    fetchAllArticles(topicSelected, sortBySelected, orderSelected, page)
+      .then(({ articles, total_count }) => {
+        if (!Array.isArray(articles) || !Number.isInteger(total_count) || total_count < 0)
+          throw new Error("Invalid articles response");
+        if (isCurrentRequest) {
+          setArticleList(articles); setTotalCount(total_count);
+          if (pageChangeRequested.current) {
+            headingRef.current?.focus();
+            pageChangeRequested.current = false;
+          }
+        }
       })
       .catch(() => {
         if (isCurrentRequest) {
+          pageChangeRequested.current = false;
           setArticleList([]);
           setError("Articles could not be loaded. The news service may be unavailable.");
         }
@@ -36,62 +49,70 @@ const ArticleList = () => {
     return () => {
       isCurrentRequest = false;
     };
-  }, [topicSelected, sortBySelected, orderSelected, retryCount]);
+  }, [topicSelected, sortBySelected, orderSelected, page, retryCount]);
 
   const toggleOrder = () => {
-    setOrderSelected((order) => (order === "asc" ? "desc" : "asc"));
+    updateQuery("order", orderSelected === "asc" ? "desc" : "asc");
   };
 
-  if (isLoading) return <main className={styles["article-list"]}><h2 role="status">Articles are loading…</h2><p>The free demo API can take about a minute to wake.</p></main>;
-
   return (
-    <main className={styles["article-list"]}>
-      <h2 className={styles["article-list-title"]}>Popular articles</h2>
+    <main className={styles["article-list"]} aria-busy={isLoading}>
+      <div className={styles.intro}>
+        <div><p className={styles.eyebrow}>THE READING ROOM</p><h2 ref={headingRef} tabIndex="-1" className={styles["article-list-title"]}>A little curiosity<br />goes a long way.</h2></div>
+        <p>Ideas from the world of code, the kitchen and the beautiful game. Pick a topic. Find your next read.</p>
+      </div>
       <div className={styles.filters}>
+        <label>Topic
         <select
           id="topicSelect"
           className={styles.dropdown}
           name="topicSelected"
           value={topicSelected}
-          onChange={(event) => setTopicSelected(event.target.value)}
+          onChange={(event) => updateQuery("topic", event.target.value)}
           aria-label="Filter articles by topic"
         >
-          <option value="">TOPIC</option>
-          <option value="coding">TECHNOLOGY</option>
-          <option value="cooking">COOKING</option>
-          <option value="football">SPORTS</option>
+          <option value="">All topics</option>
+          <option value="coding">Technology</option>
+          <option value="cooking">Cooking</option>
+          <option value="football">Football</option>
         </select>
+        </label>
+        <label>Sort by
         <select
           id="sortSelect"
           className={styles.dropdown}
           name="sortBySelected"
           value={sortBySelected}
-          onChange={(event) => setSortBySelected(event.target.value)}
+          onChange={(event) => updateQuery("sort_by", event.target.value)}
           aria-label="Sort articles by"
         >
-          <option value="">SORT BY</option>
-          <option value="created_at">DATE</option>
-          <option value="title">TITLE</option>
-          <option value="author">AUTHOR</option>
-          <option value="votes">VOTES</option>
-          <option value="comment_count">COMMENTS</option>
+          <option value="created_at">Date</option>
+          <option value="title">Title</option>
+          <option value="author">Author</option>
+          <option value="votes">Votes</option>
+          <option value="comment_count">Comments</option>
         </select>
-        <button className={styles["order-button"]} onClick={toggleOrder}>
-          ORDER {orderSelected === "asc" ? "↑" : "↓"}
+        </label>
+        <div className={styles["order-field"]}><span>Order</span>
+        <button className={styles["order-button"]} onClick={toggleOrder} aria-label={orderSelected === "asc" ? "Ascending order; switch to descending" : "Descending order; switch to ascending"}>
+          <span className={styles["order-text"]}>{orderSelected === "asc" ? "Ascending " : "Descending "}</span><span aria-hidden="true">{orderSelected === "asc" ? "↑" : "↓"}</span>
         </button>
+        </div>
+        <span className={styles.catalogue}>CODE / FOOD / FOOTBALL</span>
       </div>
-      {error ? (
+      {isLoading ? <div className={styles.notice} role="status"><strong>Finding your next read…</strong><p>The free demo API may take about a minute to wake.</p></div> : error ? (
         <p role="alert">
           {error} <button type="button" onClick={() => setRetryCount((count) => count + 1)}>Retry</button>
         </p>
       ) : articleList.length === 0 ? (
-        <p>No articles match this selection.</p>
+        <p>{totalCount ? "This page is beyond the available articles." : "No articles match this selection."}</p>
       ) : (
         <ul className={styles["article-card-list"]}>
           {articleList.map((article) => (
             <li key={article.article_id} className={styles["article-card"]}>
               <Link
                 to={"/articles/" + article.article_id}
+                state={{ browseSearch: searchParams.toString() }}
                 className={styles["article-card-link"]}
               >
                 <ArticleCard {...article} />
@@ -99,6 +120,14 @@ const ArticleList = () => {
             </li>
           ))}
         </ul>
+      )}
+      {!isLoading && !error && (
+        <nav className={styles.pagination} aria-label="Article pages">
+          <button type="button" disabled={page <= 1} onClick={() => goToPage(page - 1)}>Previous</button>
+          <p role="status">Page {page} of {Math.max(1, Math.ceil(totalCount / 12))} · {totalCount} articles</p>
+          <button type="button" disabled={page * 12 >= totalCount} onClick={() => goToPage(page + 1)}>Next</button>
+          {page > Math.max(1, Math.ceil(totalCount / 12)) && <button type="button" onClick={() => goToPage(1)}>First page</button>}
+        </nav>
       )}
     </main>
   );

@@ -6,23 +6,28 @@ const ArticleCard = ({
   article_img_url,
   votes,
   comment_count,
+  topic,
+  created_at,
 }) => {
   return (
     <>
-      <h3 className={styles["article-title"]}>{title}</h3>
-      <p className={styles["article-author"]}>By: {author}</p>
       <img
         loading="lazy"
         decoding="async"
         src={article_img_url}
-        alt={title}
+        alt=""
         className={styles["article-image"]}
       />
+      <div className={styles.copy}>
+      <div className={styles.kicker}><span>{topic === "coding" ? "Technology" : topic === "football" ? "Football" : "Cooking"}</span><time dateTime={created_at}>{new Date(created_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}</time></div>
+      <h3 className={styles["article-title"]}>{title}</h3>
+      <p className={styles["article-author"]}>By {author}</p>
       <div className={styles["article-metadata"]}>
-        <p className={styles["article-votes"]}>Votes: {votes}</p>
+        <p className={styles["article-votes"]}>{votes} votes</p>
         <p className={styles["article-comment-count"]}>
-          Comments: {comment_count}
+          {comment_count} comments ↗
         </p>
+      </div>
       </div>
     </>
   );

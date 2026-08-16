@@ -6,11 +6,13 @@ const apiUrl = axios.create({
     import.meta.env?.VITE_API_URL || "https://pure-news-api-1.onrender.com/api",
 });
 
-export const fetchAllArticles = (topic, sortBy, order) => {
+export const fetchAllArticles = (topic, sortBy, order, page = 1) => {
   const params = new URLSearchParams();
   if (topic) params.append("topic", topic);
   if (sortBy) params.append("sort_by", sortBy);
   if (order) params.append("order", order);
+  params.set("limit", "12");
+  params.set("p", String(page));
 
   return apiUrl.get("/articles?" + params).then(({ data }) => data);
 };

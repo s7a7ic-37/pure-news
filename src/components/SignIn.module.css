@@ -1,53 +1,5 @@
-.sign-in-box {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 65vh;
-  margin: 3rem 1rem 2rem;
-}
-
-.form-container {
-  max-width: 20rem;
-  width: 100%;
-}
-
-.label {
-  font-size: 1.2rem;
-  text-align: center;
-  display: block;
-  width: 100%;
-}
-
-.input {
-  border: 1px solid #ccc;
-  padding: 0.4rem;
-  margin-top: 0.7rem;
-  margin-bottom: 0.7rem;
-  margin-left: 0.3rem;
-  margin-right: 0.3rem;
-  width: 97%;
-  border-radius: 0.35rem;
-  box-sizing: border-box;
-  transition: background-color 0.3s ease;
-}
-
-.input:hover {
-  background-color: #f0f0f0;
-}
-
-.button {
-  background-color: #76d7c4;
-  color: #000000;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 0.35rem;
-  cursor: pointer;
-  width: 100%;
-  transition: background-color 0.3s ease;
-}
-
-.button:hover {
-  background-color: #17a589;
-  color: white;
-}
+.sign-in-box { width: min(470px, calc(100% - 40px)); margin: 55px auto; padding: 30px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+.label { display: block; font: 500 27px/1.25 Georgia, serif; margin-bottom: 24px; }
+.input { width: 100%; padding: 12px; border: 1px solid #bcccb7; border-radius: 7px; background: var(--paper); color: var(--ink); }
+.form-container p { font-size: 13px; line-height: 1.7; color: var(--muted); }
+.button { width: 100%; padding: 12px; border: 0; border-radius: 7px; background: var(--green); color: white; font-weight: 700; cursor: pointer; }

@@ -1,11 +1,16 @@
-import React from "react";
+import { Link } from "react-router-dom";
 import styles from "./Header.module.css";
 
 const Header = () => {
-  const headerText = "Pure News";
   return (
     <header className={styles.header}>
-      <h1 className={styles.logo}>{headerText}</h1>
+      <div className={styles.inner}>
+        <div>
+          <p className={styles.eyebrow}>THE PUBLIC SAMPLE EDITION</p>
+          <h1 className={styles.logo}><Link to="/">Pure <span>News.</span></Link></h1>
+        </div>
+        <p className={styles.tagline}>Good stories.<br />Different perspectives.</p>
+      </div>
     </header>
   );
 };

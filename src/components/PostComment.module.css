@@ -1,80 +1,8 @@
-.submit-comment {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border: 1px solid #e0e0e0;
-  padding: 1rem;
-  margin: 1rem;
-  border-radius: 0.5rem;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
-}
-
+.submit-comment { border: 1px solid var(--line); background: var(--surface); padding: 24px; border-radius: 12px; }
 .submit-comment form { width: 100%; min-width: 0; }
-
-.new-comment-label {
-  font-size: 0.9rem;
-}
-
-.new-comment-box {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-textarea {
-  width: 100%;
-  max-width: 95%;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 0.5rem;
-  font-size: 0.9rem;
-  margin: 0.5rem 0;
-}
-
-textarea:focus {
-  outline: none;
-  border: 1px solid #76d7c4;
-}
-
-.add-comment-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-.add-comment-button {
-  background-color: #76d7c4;
-  color: #000000;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 0.35rem;
-  cursor: pointer;
-  width: 100%;
-  transition: background-color 0.3s ease;
-}
-
-.add-comment-button:hover {
-  background-color: #17a589;
-  color: white;
-}
-
-.message-container {
-  text-align: center;
-  width: 100%;
-  margin: 0;
-}
-
-.error-message {
-  font-size: 0.9rem;
-  color: red;
-  margin: 0;
-  padding: 0;
-}
-
-.comment-posted {
-  font-size: 0.9rem;
-  color: #00b300;
-  margin: 0;
-  padding: 0;
-}
+.new-comment-label { font-weight: 700; font-size: 13px; }
+.new-comment-box { display: grid; gap: 12px; margin-top: 12px; }
+.new-comment-box textarea { width: 100%; max-width: 100%; min-height: 130px; padding: 14px; border: 1px solid #cbd5c7; border-radius: 8px; font-size: 16px; background: var(--paper); color: var(--ink); resize: vertical; }
+.add-comment-button { justify-self: start; padding: 10px 24px; border: 0; border-radius: 7px; background: var(--green); color: white; font-weight: 650; cursor: pointer; }
+.error-message { color: #a34a30; font-size: 13px; }
+.comment-posted { color: var(--green); font-size: 13px; }
