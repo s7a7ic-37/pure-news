@@ -1,4 +1,4 @@
-:root { font-family: "Segoe UI", Arial, sans-serif; color: #382b2c; background: #f8f5ef; --ink: #382b2c; --muted: #75696a; --accent: #8d3446; --line: #e5ddd7; --paper: #f8f5ef; --surface: #fffdf9; }
+:root { font-family: "Segoe UI", Arial, sans-serif; color: #382b2c; background: #f8f5ef; --ink: #382b2c; --muted: #6c5f62; --accent: #8d3446; --line: #e5ddd7; --paper: #f8f5ef; --surface: #fffdf9; }
 * { box-sizing: border-box; }
 body { margin: 0; }
 a { color: var(--accent); text-underline-offset: 4px; }
