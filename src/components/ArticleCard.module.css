@@ -1,8 +1,10 @@
 .article-image { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; background: #ece3dd; }
-.copy { padding: 22px; }
+.copy { padding: 20px 4px 24px; }
 .kicker { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; font-size: 10px; color: var(--muted); }
 .kicker span { color: var(--accent); font-weight: 750; text-transform: uppercase; letter-spacing: .08em; }
-.article-title { margin: 14px 0 12px; font: 500 24px/1.18 Georgia, serif; letter-spacing: -.025em; }
+.article-title { margin: 14px 0 12px; font: 700 28px/1.1 "Times New Roman",Times,serif; letter-spacing: -.025em; }
 .article-author { font-size: 11px; color: var(--muted); margin: 0; }
 .article-metadata { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; border-top: 1px solid var(--line); margin-top: 24px; padding-top: 14px; }
 .article-votes, .article-comment-count { font-size: 11px; color: var(--muted); margin: 0; }
+
+.kicker, .article-author, .article-metadata { font-family: Arial,sans-serif; }

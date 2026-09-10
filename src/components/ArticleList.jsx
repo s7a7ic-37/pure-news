@@ -58,8 +58,7 @@ const ArticleList = () => {
   return (
     <main className={styles["article-list"]} aria-busy={isLoading}>
       <div className={styles.intro}>
-        <div><p className={styles.eyebrow}>THE READING ROOM</p><h2 ref={headingRef} tabIndex="-1" className={styles["article-list-title"]}>A little curiosity<br />goes a long way.</h2></div>
-        <p>Ideas from the world of code, the kitchen and the beautiful game. Pick a topic. Find your next read.</p>
+        <h2 ref={headingRef} tabIndex="-1" className={styles["article-list-title"]}>Latest stories</h2>
       </div>
       <div className={styles.filters}>
         <label>Topic

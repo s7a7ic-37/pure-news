@@ -1,8 +1,8 @@
-:root { font-family: "Segoe UI", Arial, sans-serif; color: #382b2c; background: #f8f5ef; --ink: #382b2c; --muted: #6c5f62; --accent: #8d3446; --line: #e5ddd7; --paper: #f8f5ef; --surface: #fffdf9; }
+:root { font-family: "Times New Roman", Times, serif; color: #382b2c; background: #fffefb; --ink: #382b2c; --muted: #6c5f62; --accent: #8d3446; --line: #e5ddd7; --paper: #fffefb; --surface: #fffefb; }
 * { box-sizing: border-box; }
 body { margin: 0; }
 a { color: var(--accent); text-underline-offset: 4px; }
-button, select, input, textarea { font: inherit; }
+button, select, input, textarea { font: 14px Arial,sans-serif; }
 button, select { min-height: 44px; }
 button { min-width: 44px; color: var(--ink); }
 button:disabled { cursor: default; opacity: .55; }
