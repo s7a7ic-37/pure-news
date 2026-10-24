@@ -1,0 +1,15 @@
+{
+  "name": "pure-news",
+  "main": "worker.js",
+  "account_id": "671415c7ecfa0bd6ad7e3ae53b1fab88",
+  "compatibility_date": "2026-10-31",
+  "workers_dev": true,
+  "preview_urls": false,
+  "routes": [{ "pattern": "news.artemislab.co.uk", "custom_domain": true }],
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api", "/api/*"]
+  }
+}

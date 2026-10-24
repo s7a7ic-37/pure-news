@@ -12,11 +12,6 @@
 .catalogue { margin: auto 0 12px auto; color: var(--muted); letter-spacing: .12em; font-size: 10px; }
 .article-card-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; list-style: none; padding: 0; margin: 28px 0; }
 .article-card { min-width: 0; overflow: hidden; border-bottom: 1px solid var(--line); background: var(--surface); }
-.article-card:first-child { grid-column: span 2; }
-.article-card:first-child img { aspect-ratio: 2 / 1; }
-.single-article-list { grid-template-columns: minmax(0, 760px); justify-content: center; }
-.single-article-list .article-card:first-child { grid-column: auto; }
-.single-article-list .article-card:first-child img { aspect-ratio: 16 / 9; }
 .article-card:hover h3 { text-decoration: underline; text-underline-offset: 4px; }
 .article-card-link { display: block; height: 100%; text-decoration: none; color: inherit; }
 .pagination { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px; margin: 32px 0; }
@@ -34,5 +29,3 @@
   .pagination p { width: 100%; order: -1; text-align: center; }
 }
 @media(prefers-reduced-motion:reduce) { .article-card { transition: none; } .article-card:hover { transform: none; } }
-
-@media(max-width:620px) { .article-card:first-child { grid-column: auto; } }

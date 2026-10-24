@@ -2,7 +2,7 @@
 
 A React news discussion app with topic filters, sorting, pagination, article voting and comments.
 
-**[Live app](https://pure-news.netlify.app/)** · **[API and setup](https://github.com/s7a7ic-37/pure-news-api)**
+**[Live app](https://news.artemislab.co.uk/)** · **[API and setup](https://github.com/s7a7ic-37/pure-news-api)**
 
 ## Features
 
@@ -22,9 +22,9 @@ npm ci
 npm run dev
 ```
 
-The default API is `https://pure-news-api-1.onrender.com/api`. Set `VITE_API_URL` in an untracked `.env.local` file to use another API; include the `/api` path.
+The default API is `https://news.artemislab.co.uk/api`. Set `VITE_API_URL` in an untracked `.env.local` file to use another API; include the `/api` path.
 
-`npm test` runs vote and API-client checks. `npm run build` creates `dist/`. Netlify uses `public/_redirects` for direct article links.
+`npm test` runs vote, API-client and proxy checks. `npm run build` creates `dist/`. Cloudflare hosts the frontend and forwards `/api` requests to the existing Express service on Render.
 
 ## Demo notes
 

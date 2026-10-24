@@ -3,7 +3,7 @@ import axios from "axios";
 const apiUrl = axios.create({
   timeout: 90000,
   baseURL:
-    import.meta.env?.VITE_API_URL || "https://pure-news-api-1.onrender.com/api",
+    import.meta.env?.VITE_API_URL || "https://news.artemislab.co.uk/api",
 });
 
 export const fetchAllArticles = (topic, sortBy, order, page = 1) => {
