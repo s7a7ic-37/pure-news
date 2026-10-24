@@ -33,7 +33,7 @@ function App() {
             />
           </Routes>
         </div>
-        <footer className={styles.footer}><strong>Pure News.</strong><a href="https://github.com/s7a7ic-37/pure-news">Source ↗</a><a href="https://portfolio.artemislab.co.uk/">Maksymilian’s portfolio ↗</a></footer>
+        <footer className={styles.footer}><strong>Pure News.</strong><a href="https://github.com/s7a7ic-37/pure-news">Frontend source ↗</a><a href="https://github.com/s7a7ic-37/pure-news-api">API source ↗</a></footer>
       </div>
     </UserContext.Provider>
   );

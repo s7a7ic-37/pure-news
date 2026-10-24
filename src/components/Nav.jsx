@@ -14,6 +14,7 @@ const Nav = () => {
       <p>
         <span className={styles.identity}>Reading as <b>{user}</b></span> <Link to="/demo-user">Switch identity ↗</Link>
       </p>
+      <a href="https://portfolio.artemislab.co.uk/#projects">← All projects</a>
       <small>Public sample data · no authenticated accounts</small>
     </nav>
   );
