@@ -1,4 +1,5 @@
 import styles from "./ArticleCard.module.css";
+import { formatPostedAt } from "../utils/formatPostedAt";
 
 const ArticleCard = ({
   author,
@@ -19,7 +20,7 @@ const ArticleCard = ({
         className={styles["article-image"]}
       />
       <div className={styles.copy}>
-      <div className={styles.kicker}><span>{topic === "coding" ? "Technology" : topic === "football" ? "Football" : "Cooking"}</span><time dateTime={created_at}>{new Date(created_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}</time></div>
+      <div className={styles.kicker}><span>{topic === "coding" ? "Technology" : topic === "football" ? "Football" : "Cooking"}</span><time dateTime={created_at}>{formatPostedAt(created_at)}</time></div>
       <h3 className={styles["article-title"]}>{title}</h3>
       <p className={styles["article-author"]}>By {author}</p>
       <div className={styles["article-metadata"]}>

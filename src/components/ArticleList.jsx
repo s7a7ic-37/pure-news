@@ -106,7 +106,7 @@ const ArticleList = () => {
       ) : articleList.length === 0 ? (
         <p>{totalCount ? "This page is beyond the available articles." : "No articles match this selection."}</p>
       ) : (
-        <ul className={styles["article-card-list"]}>
+        <ul className={`${styles["article-card-list"]} ${articleList.length === 1 ? styles["single-article-list"] : ""}`}>
           {articleList.map((article) => (
             <li key={article.article_id} className={styles["article-card"]}>
               <Link

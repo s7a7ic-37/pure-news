@@ -6,7 +6,9 @@
 .article-image { display: block; width: 100%; max-height: 420px; object-fit: cover; margin: 8px 0 28px; }
 .article-body { font: 20px/1.75 "Times New Roman",Times,serif; white-space: pre-line; }
 .vote-box { display: flex; justify-content: center; align-items: center; gap: 18px; padding-top: 28px; }
-.vote-button { border: 1px solid #d8c7c7; border-radius: 50%; background: var(--surface); font-size: 24px; cursor: pointer; }
+.vote-button { min-width: 44px; min-height: 44px; border: 1px solid #d8c7c7; border-radius: 50%; background: var(--surface); font-size: 24px; cursor: pointer; }
+.vote-button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.vote-button:disabled { cursor: wait; opacity: .65; }
 .vote-button[aria-pressed=true] { background: var(--accent); color: var(--accent-text,white); }
 .article-votes { font-size: 13px; color: var(--muted); }
 .error-message { color: var(--error,#a34a30); font-size: 13px; text-align: center; }

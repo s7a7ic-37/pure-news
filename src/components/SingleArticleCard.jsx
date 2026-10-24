@@ -2,6 +2,7 @@ import { useState } from "react";
 import { updateArticleVotes } from "../utils/utils";
 import { getVoteUpdate } from "../utils/votes";
 import styles from "./SingleArticleCard.module.css";
+import { formatPostedAt } from "../utils/formatPostedAt";
 
 const SingleArticleCard = ({ presentArticle }) => {
   const {
@@ -14,7 +15,7 @@ const SingleArticleCard = ({ presentArticle }) => {
     votes,
     article_img_url,
   } = presentArticle;
-  const formattedDate = new Date(created_at).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+  const formattedDate = formatPostedAt(created_at);
 
   const [newVotes, setNewVotes] = useState(votes);
   const [voteChange, setVoteChange] = useState(0);
@@ -54,7 +55,7 @@ const SingleArticleCard = ({ presentArticle }) => {
         <h2 className={styles["article-title"]}>{title}</h2>
         <div className={styles["post-data-box"]}>
           <p className={styles["article-author"]}>{author}</p>
-          <p className={styles["article-date"]}>{formattedDate}</p>
+          <time className={styles["article-date"]} dateTime={created_at}>{formattedDate}</time>
         </div>
         <img
           className={styles["article-image"]}
@@ -85,6 +86,7 @@ const SingleArticleCard = ({ presentArticle }) => {
             -
           </button>
         </div>
+        {isUpdating && <p role="status" className={styles["error-message"]}>Saving vote…</p>}
         {isError && (
           <p className={styles["error-message"]} role="alert">
             Your vote could not be saved. Please try again.
