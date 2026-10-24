@@ -1,4 +1,4 @@
-:root { font-family: "Times New Roman", Times, serif; color: #382b2c; background: #fffefb; --ink: #382b2c; --muted: #6c5f62; --accent: #8d3446; --line: #e5ddd7; --paper: #fffefb; --surface: #fffefb; }
+:root { font-family: "Times New Roman", Times, serif; color: var(--ink); background: var(--paper); --ink: #382b2c; --muted: #6c5f62; --accent: #8d3446; --line: #e5ddd7; --paper: #fffefb; --surface: #fffefb; }
 * { box-sizing: border-box; }
 body { margin: 0; }
 a { color: var(--accent); text-underline-offset: 4px; }
@@ -9,3 +9,5 @@ button:disabled { cursor: default; opacity: .55; }
 article { overflow-wrap: anywhere; }
 :focus-visible { outline: 3px solid #bd713c !important; outline-offset: 4px; }
 @media (max-width: 760px) { input, select, textarea { font-size: 16px !important; } }
+
+:root[data-theme="dark"] { --ink: #f1e7e7; --muted: #c4adb5; --accent: #e7a2b4; --accent-text: #2a1820; --line: #5c4149; --paper: #231a20; --surface: #2e2229; --nav: #382930; --error: #ffb398; }

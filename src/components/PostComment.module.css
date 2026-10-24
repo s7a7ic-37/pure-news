@@ -3,6 +3,6 @@
 .new-comment-label { font-weight: 700; font-size: 13px; }
 .new-comment-box { display: grid; gap: 12px; margin-top: 12px; }
 .new-comment-box textarea { width: 100%; max-width: 100%; min-height: 130px; padding: 14px; border: 1px solid #d8c7c7; border-radius: 8px; font-size: 16px; background: var(--paper); color: var(--ink); resize: vertical; }
-.add-comment-button { justify-self: start; padding: 10px 24px; border: 0; border-radius: 7px; background: var(--accent); color: white; font-weight: 650; cursor: pointer; }
-.error-message { color: #a34a30; font-size: 13px; }
+.add-comment-button { justify-self: start; padding: 10px 24px; border: 0; border-radius: 7px; background: var(--accent); color: var(--accent-text,white); font-weight: 650; cursor: pointer; }
+.error-message { color: var(--error,#a34a30); font-size: 13px; }
 .comment-posted { color: var(--accent); font-size: 13px; }
