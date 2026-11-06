@@ -15,7 +15,7 @@ Built with React, React Router, Vite, Axios and CSS modules.
 
 ## Run locally
 
-Requires Node.js 22 and a running Pure News API.
+Requires Node.js 22.12 or newer and a running Pure News API.
 
 ```sh
 npm ci
