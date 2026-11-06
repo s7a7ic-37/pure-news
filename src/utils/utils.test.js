@@ -5,7 +5,7 @@ import axios from "axios";
 let respond;
 const originalAdapter = axios.defaults.adapter;
 axios.defaults.adapter = async (config) => respond(config);
-const { fetchAllArticles, addComment } = await import("./utils.js");
+const { fetchAllArticles, addComment, updateArticleVotes } = await import("./utils.js");
 axios.defaults.adapter = originalAdapter;
 
 test("article filters remain URL parameters and requests have a cold-start timeout", async () => {
@@ -59,4 +59,19 @@ test("upstream failures reach the caller's error and retry state", async () => {
     throw failure;
   };
   await assert.rejects(fetchAllArticles(), (error) => error === failure);
+});
+
+test("votes return the server's total, including votes from other readers", async () => {
+  respond = (config) => {
+    assert.equal(config.method, "patch");
+    assert.equal(config.url, "/articles/1");
+    assert.deepEqual(JSON.parse(config.data), { inc_votes: 1 });
+    return { data: { article: { article_id: 1, votes: 103 } }, status: 200, config };
+  };
+  assert.equal((await updateArticleVotes(1, { inc_votes: 1 })).votes, 103);
+});
+
+test("malformed vote totals reach the rollback handler", async () => {
+  respond = (config) => ({ data: { article: { votes: "103" } }, status: 200, config });
+  await assert.rejects(updateArticleVotes(1, { inc_votes: 1 }), /Invalid vote response/);
 });

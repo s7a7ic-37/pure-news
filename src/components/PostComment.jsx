@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { UserContext } from "../contexts/UserContext";
 import { addComment } from "../utils/utils";
 import styles from "./PostComment.module.css";
+import { isCommentValid } from "../utils/comments";
 
 const PostComment = ({ article_id, setCommentList }) => {
   const { user } = useContext(UserContext);
@@ -11,15 +12,10 @@ const PostComment = ({ article_id, setCommentList }) => {
   const [isInputCorrect, setIsInputCorrect] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const isInputValid = (input) => {
-    const inputLength = (input.match(/[a-zA-Z0-9]/g) || []).length;
-    return inputLength >= 3;
-  };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (!isInputValid(commentInput)) {
+    if (!isCommentValid(commentInput)) {
       setIsInputCorrect(false);
       return;
     }
@@ -47,6 +43,7 @@ const PostComment = ({ article_id, setCommentList }) => {
   const handleChange = (event) => {
     setCommentInput(event.target.value);
     setIsPosted(false);
+    setIsInputCorrect(true);
   };
 
   return (
@@ -64,6 +61,9 @@ const PostComment = ({ article_id, setCommentList }) => {
             value={commentInput}
             onChange={handleChange}
             required
+            maxLength={2000}
+            aria-invalid={!isInputCorrect}
+            aria-describedby={!isInputCorrect ? "comment-validation" : undefined}
           ></textarea>
           <button
             type="submit"
@@ -86,8 +86,8 @@ const PostComment = ({ article_id, setCommentList }) => {
           </p>
         )}
         {!isInputCorrect && (
-          <p className={styles["error-message"]}>
-            Your comment should be at least 3 characters long
+          <p id="comment-validation" className={styles["error-message"]} role="alert">
+            Use 3–2000 characters, excluding leading and trailing spaces from the minimum.
           </p>
         )}
       </div>

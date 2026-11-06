@@ -24,7 +24,10 @@ export const fetchCommentsByArticle = (article_id) =>
   apiUrl.get("/articles/" + article_id + "/comments").then(({ data }) => data);
 
 export const updateArticleVotes = (article_id, voteChange) =>
-  apiUrl.patch("/articles/" + article_id, voteChange).then(({ data }) => data);
+  apiUrl.patch("/articles/" + article_id, voteChange).then(({ data }) => {
+    if (!Number.isInteger(data.article?.votes)) throw new Error("Invalid vote response");
+    return data.article;
+  });
 
 export const addComment = (article_id, username, body) =>
   apiUrl

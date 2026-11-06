@@ -35,7 +35,8 @@ const SingleArticleCard = ({ presentArticle }) => {
     setIsUpdating(true);
 
     try {
-      await updateArticleVotes(article_id, { inc_votes: delta });
+      const updatedArticle = await updateArticleVotes(article_id, { inc_votes: delta });
+      setNewVotes(updatedArticle.votes);
     } catch {
       setNewVotes(previousVotes);
       setVoteChange(previousChange);
