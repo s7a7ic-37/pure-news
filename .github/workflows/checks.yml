@@ -15,8 +15,6 @@ jobs:
       - run: npm test
       - run: npm run lint
       - run: npm run build
-      - name: Check Netlify client-side routing file is published
-        run: test -f dist/_redirects
       - name: Scan published files for credentials
         run: >-
           docker run --rm --network none --read-only

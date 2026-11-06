@@ -24,7 +24,7 @@ npm run dev
 
 The default API is `https://news.artemislab.co.uk/api`. Set `VITE_API_URL` in an untracked `.env.local` file to use another API; include the `/api` path.
 
-`npm test` runs vote, API-client and proxy checks. `npm run build` creates `dist/`. Cloudflare hosts the frontend and forwards `/api` requests to the existing Express service on Render.
+`npm test` runs vote, API-client and proxy checks. `npm run lint` checks the React source. `npm run build` creates `dist/`. Cloudflare hosts the frontend and forwards `/api` requests to the existing Express service on Render; its static-assets configuration handles page routes.
 
 ## Demo notes
 
