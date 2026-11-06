@@ -13,6 +13,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm test
+      - run: npm run lint
       - run: npm run build
       - name: Check Netlify client-side routing file is published
         run: test -f dist/_redirects
