@@ -14,7 +14,8 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run lint
-      - run: npm run build
+      - run: npx playwright install --with-deps --only-shell chromium
+      - run: npm run test:browser
       - name: Scan published files for credentials
         run: >-
           docker run --rm --network none --read-only

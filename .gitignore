@@ -34,3 +34,5 @@ dist-ssr
 
 # Local Cloudflare state
 .wrangler/
+test-results/
+playwright-report/

@@ -27,6 +27,8 @@ The default API is `https://news.artemislab.co.uk/api`. Set `VITE_API_URL` in an
 
 `npm test` runs vote, API-client and proxy checks. `npm run lint` checks the React source. `npm run build` creates `dist/`. Cloudflare hosts the frontend and forwards `/api` requests to the existing Express service on Render; its static-assets configuration handles page routes.
 
+For the built-app browser regressions, run `npx playwright install --only-shell chromium` once, then `npm run test:browser`. Mobile and desktop tests check saved-link persistence, cross-tab updates, storage failures and global styling. They use synthetic intercepted API responses, so no public votes or comments are written. CI runs these checks too.
+
 ## Demo notes
 
 Sample usernames are not authenticated accounts. Avoid submitting personal information. The free API may take about a minute to wake after inactivity.
