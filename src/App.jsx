@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, Route, Routes } from "react-router-dom";
 import styles from "./App.module.css";
 import { UserContext } from "./contexts/UserContext";
@@ -7,21 +7,53 @@ import SignIn from "./components/SignIn";
 import Nav from "./components/Nav";
 import ArticleList from "./components/ArticleList";
 import SingleArticle from "./components/SingleArticle";
+import SavedStories from "./components/SavedStories";
+import { SAVED_STORIES_KEY, parseSavedStories, toggleSavedStory, ReadingListError } from "./utils/savedStories";
+
+function readReadingList() {
+  try {
+    return {stories: parseSavedStories(window.localStorage.getItem(SAVED_STORIES_KEY)), error: ""};
+  } catch (error) {
+    return {stories: [], error: error instanceof ReadingListError ? error.message : "Browser storage is unavailable. Saved stories could not be read."};
+  }
+}
 
 function App() {
   const [user, setUser] = useState("weegembump");
+  const [saved, setSaved] = useState(readReadingList);
+
+  useEffect(() => {
+    const sync = (event) => {
+      if (event.key === SAVED_STORIES_KEY || event.key === null) setSaved(readReadingList());
+    };
+    window.addEventListener("storage", sync);
+    return () => window.removeEventListener("storage", sync);
+  }, []);
+
+  function toggleSave(article) {
+    try {
+      const current = parseSavedStories(window.localStorage.getItem(SAVED_STORIES_KEY));
+      const next = toggleSavedStory(current, article);
+      window.localStorage.setItem(SAVED_STORIES_KEY, JSON.stringify(next));
+      setSaved({stories: next, error: ""});
+    } catch (error) {
+      setSaved((previous) => ({...previous, error: error instanceof ReadingListError ? error.message : "This change could not be saved in browser storage. Your previous reading list is unchanged."}));
+    }
+  }
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
       <div className={styles.container}>
         <Header />
-        <Nav />
+        <Nav savedCount={saved.stories.length} />
+        {saved.error && <div className={styles.notice} role="alert"><p>{saved.error}</p><button type="button" onClick={() => setSaved(readReadingList())}>Retry reading list</button></div>}
         <div>
           <Routes>
             <Route path="/" element={<ArticleList />} />
             <Route path="/demo-user" element={<SignIn />} />
             <Route path="/home" element={<ArticleList />} />
-            <Route path="/articles/:article_id" element={<SingleArticle />} />
+            <Route path="/articles/:article_id" element={<SingleArticle savedStories={saved.stories} onToggleSave={toggleSave} />} />
+            <Route path="/saved" element={<SavedStories stories={saved.stories} onToggleSave={toggleSave} />} />
             <Route
               path="*"
               element={

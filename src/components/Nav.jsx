@@ -3,7 +3,7 @@ import { UserContext } from "../contexts/UserContext";
 import { Link } from "react-router-dom";
 import styles from "./Nav.module.css";
 
-const Nav = () => {
+const Nav = ({ savedCount }) => {
   const { user } = useContext(UserContext);
 
   return (
@@ -11,6 +11,7 @@ const Nav = () => {
       <Link to="/home" className={styles["link-homepage"]}>
         All stories
       </Link>
+      <Link to="/saved">Saved ({savedCount})</Link>
       <p>
         <span className={styles.identity}>Reading as <b>{user}</b></span> <Link to="/demo-user">Switch identity ↗</Link>
       </p>

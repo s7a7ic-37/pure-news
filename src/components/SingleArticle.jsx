@@ -5,14 +5,14 @@ import SingleArticleCard from "./SingleArticleCard";
 import CommentList from "./CommentList";
 import styles from "./SingleArticle.module.css";
 
-const SingleArticle = () => {
+const SingleArticle = ({ savedStories, onToggleSave }) => {
   const [presentArticle, setPresentArticle] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [retryCount, setRetryCount] = useState(0);
   const { article_id } = useParams();
   const { state } = useLocation();
-  const backToArticles = { pathname: "/", search: state?.browseSearch || "" };
+  const backToArticles = state?.fromSaved ? "/saved" : { pathname: "/", search: state?.browseSearch || "" };
 
   useEffect(() => {
     let isCurrentRequest = true;
@@ -65,14 +65,19 @@ const SingleArticle = () => {
             Retry article
           </button>
         )}
-        <Link to={backToArticles}>Back to articles</Link>
+        <Link to={backToArticles}>{state?.fromSaved ? "Back to saved stories" : "Back to articles"}</Link>
       </main>
     );
   }
 
   return (
     <main className={styles["single-article-card"]}>
-      <Link to={backToArticles}>← Back to these articles</Link>
+      <div className={styles.actions}>
+        <Link to={backToArticles}>{state?.fromSaved ? "← Back to saved stories" : "← Back to these articles"}</Link>
+        <button type="button" onClick={() => onToggleSave(presentArticle)} aria-pressed={savedStories.some((story) => story.article_id === presentArticle.article_id)}>
+          {savedStories.some((story) => story.article_id === presentArticle.article_id) ? "Remove from saved" : "Save story"}
+        </button>
+      </div>
       <SingleArticleCard key={article_id} presentArticle={presentArticle} />
       <CommentList key={article_id} article_id={article_id} />
     </main>
