@@ -34,7 +34,7 @@ test("votes lock while pending, use server totals and roll back failed changes",
     await expect(down).toBeDisabled();
     await expect(up).toHaveAttribute("aria-pressed", "true");
     await expect(page.getByText("Saving vote…", { exact: true })).toBeVisible();
-    expect(deltas).toEqual([1]);
+    await expect.poll(() => deltas).toEqual([1]);
   } finally { release(); }
   await expect(votes).toHaveText("Votes: 50");
   await down.click();
