@@ -27,7 +27,7 @@ The default API is `https://news.artemislab.co.uk/api`. Set `VITE_API_URL` in an
 
 `npm test` runs vote, API-client and proxy checks. `npm run lint` checks the React source. `npm run build` creates `dist/`. Cloudflare hosts the frontend and forwards `/api` requests to the existing Express service on Render; its static-assets configuration handles page routes.
 
-For the built-app browser regressions, run `npx playwright install --only-shell chromium` once, then `npm run test:browser`. Mobile and desktop tests check saved-link persistence, cross-tab updates, storage failures and global styling. They use synthetic intercepted API responses, so no public votes or comments are written. CI runs these checks too.
+For the built-app browser regressions, run `npx playwright install --only-shell chromium webkit` once, then `npm run test:browser`. Chromium desktop/mobile and mobile WebKit tests check saved-link persistence, cross-tab updates, storage failures and global styling. They use synthetic intercepted API responses, so no public votes or comments are written. CI runs these checks too. Browser emulation does not replace physical-device testing.
 
 ## Demo notes
 
