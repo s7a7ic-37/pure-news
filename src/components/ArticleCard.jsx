@@ -24,9 +24,9 @@ const ArticleCard = ({
       <h3 className={styles["article-title"]}>{title}</h3>
       <p className={styles["article-author"]}>By {author}</p>
       <div className={styles["article-metadata"]}>
-        <p className={styles["article-votes"]}>{votes} votes</p>
+        <p className={styles["article-votes"]}>{votes} {Math.abs(votes) === 1 ? "vote" : "votes"}</p>
         <p className={styles["article-comment-count"]}>
-          {comment_count} comments ↗
+          {comment_count} {comment_count === 1 ? "comment" : "comments"} ↗
         </p>
       </div>
       </div>

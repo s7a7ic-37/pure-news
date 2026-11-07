@@ -123,7 +123,7 @@ const ArticleList = () => {
       {!isLoading && !error && (
         <nav className={styles.pagination} aria-label="Article pages">
           <button type="button" disabled={page <= 1} onClick={() => goToPage(page - 1)}>Previous</button>
-          <p role="status">Page {page} of {Math.max(1, Math.ceil(totalCount / 12))} · {totalCount} articles</p>
+          <p role="status">Page {page} of {Math.max(1, Math.ceil(totalCount / 12))} · {totalCount} {totalCount === 1 ? "article" : "articles"}</p>
           <button type="button" disabled={page * 12 >= totalCount} onClick={() => goToPage(page + 1)}>Next</button>
           {page > Math.max(1, Math.ceil(totalCount / 12)) && <button type="button" onClick={() => goToPage(1)}>First page</button>}
         </nav>
