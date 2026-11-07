@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { formatPostedAt } from "../utils/formatPostedAt";
 import styles from "./SavedStories.module.css";
 
-export default function SavedStories({ stories, onToggleSave }) {
+export default function SavedStories({ stories, onSaveStory }) {
   return (
     <main className={styles.saved}>
       <h2>Saved stories</h2>
@@ -20,7 +20,7 @@ export default function SavedStories({ stories, onToggleSave }) {
                 <Link to={`/articles/${story.article_id}`} state={{fromSaved: true}}>{story.title}</Link>
                 <time dateTime={story.saved_at}>Saved {formatPostedAt(story.saved_at)}</time>
               </div>
-              <button type="button" onClick={() => onToggleSave(story)} aria-label={`Remove ${story.title} from saved stories`}>Remove</button>
+              <button type="button" onClick={() => onSaveStory(story, false)} aria-label={`Remove ${story.title} from saved stories`}>Remove</button>
             </li>
           ))}
         </ul>

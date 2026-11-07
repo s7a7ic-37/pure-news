@@ -8,7 +8,7 @@ import Nav from "./components/Nav";
 import ArticleList from "./components/ArticleList";
 import SingleArticle from "./components/SingleArticle";
 import SavedStories from "./components/SavedStories";
-import { SAVED_STORIES_KEY, parseSavedStories, toggleSavedStory, ReadingListError } from "./utils/savedStories";
+import { SAVED_STORIES_KEY, parseSavedStories, setStorySaved, ReadingListError } from "./utils/savedStories";
 
 function readReadingList() {
   try {
@@ -30,10 +30,10 @@ function App() {
     return () => window.removeEventListener("storage", sync);
   }, []);
 
-  function toggleSave(article) {
+  function saveStory(article, shouldSave) {
     try {
       const current = parseSavedStories(window.localStorage.getItem(SAVED_STORIES_KEY));
-      const next = toggleSavedStory(current, article);
+      const next = setStorySaved(current, article, shouldSave);
       window.localStorage.setItem(SAVED_STORIES_KEY, JSON.stringify(next));
       setSaved({stories: next, error: ""});
     } catch (error) {
@@ -52,8 +52,8 @@ function App() {
             <Route path="/" element={<ArticleList />} />
             <Route path="/demo-user" element={<SignIn />} />
             <Route path="/home" element={<ArticleList />} />
-            <Route path="/articles/:article_id" element={<SingleArticle savedStories={saved.stories} onToggleSave={toggleSave} />} />
-            <Route path="/saved" element={<SavedStories stories={saved.stories} onToggleSave={toggleSave} />} />
+            <Route path="/articles/:article_id" element={<SingleArticle savedStories={saved.stories} onSaveStory={saveStory} />} />
+            <Route path="/saved" element={<SavedStories stories={saved.stories} onSaveStory={saveStory} />} />
             <Route
               path="*"
               element={

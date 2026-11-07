@@ -23,11 +23,12 @@ export function parseSavedStories(raw) {
   }
 }
 
-export function toggleSavedStory(stories, article) {
+export function setStorySaved(stories, article, shouldSave) {
   if (!Number.isSafeInteger(article.article_id) || article.article_id < 1)
     throw new ReadingListError("This story could not be saved.");
-  if (stories.some((story) => story.article_id === article.article_id))
+  if (!shouldSave)
     return stories.filter((story) => story.article_id !== article.article_id);
+  if (stories.some((story) => story.article_id === article.article_id)) return stories;
   if (stories.length >= SAVED_STORIES_LIMIT)
     throw new ReadingListError("You can save up to 50 stories. Remove one first.");
   if (typeof article.title !== "string" || !article.title.trim() || article.title.length > 1000)

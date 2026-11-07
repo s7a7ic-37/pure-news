@@ -5,7 +5,7 @@ import SingleArticleCard from "./SingleArticleCard";
 import CommentList from "./CommentList";
 import styles from "./SingleArticle.module.css";
 
-const SingleArticle = ({ savedStories, onToggleSave }) => {
+const SingleArticle = ({ savedStories, onSaveStory }) => {
   const [presentArticle, setPresentArticle] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
@@ -70,12 +70,14 @@ const SingleArticle = ({ savedStories, onToggleSave }) => {
     );
   }
 
+  const isSaved = savedStories.some((story) => story.article_id === presentArticle.article_id);
+
   return (
     <main className={styles["single-article-card"]}>
       <div className={styles.actions}>
         <Link to={backToArticles}>{state?.fromSaved ? "← Back to saved stories" : "← Back to these articles"}</Link>
-        <button type="button" onClick={() => onToggleSave(presentArticle)} aria-pressed={savedStories.some((story) => story.article_id === presentArticle.article_id)}>
-          {savedStories.some((story) => story.article_id === presentArticle.article_id) ? "Remove from saved" : "Save story"}
+        <button type="button" onClick={() => onSaveStory(presentArticle, !isSaved)} aria-pressed={isSaved}>
+          {isSaved ? "Remove from saved" : "Save story"}
         </button>
       </div>
       <SingleArticleCard key={article_id} presentArticle={presentArticle} />

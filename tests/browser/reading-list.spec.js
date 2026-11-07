@@ -53,3 +53,27 @@ test("failed storage writes preserve earlier links and offer recovery", async ({
   await page.getByRole("link", { name: "Saved (1)", exact: true }).click();
   await expect(page.getByRole("link", { name: previous[0].title, exact: true })).toBeVisible();
 });
+
+test("stale reading-list controls preserve the requested save or removal", async ({ page }) => {
+  await page.goto("/articles/1");
+  await expect(page.getByRole("button", { name: "Save story", exact: true })).toBeVisible();
+  const saved = [{ article_id: article.article_id, title: article.title, saved_at: "2026-01-01T12:00:00Z" }];
+  // Hold the UI behind storage to model a tab awaiting its storage notification.
+  await page.evaluate(({ key, saved }) => localStorage.setItem(key, JSON.stringify(saved)), { key, saved });
+  await page.getByRole("button", { name: "Save story", exact: true }).click();
+  expect(await page.evaluate(key => JSON.parse(localStorage.getItem(key)), key)).toEqual(saved);
+  await expect(page.getByRole("button", { name: "Remove from saved", exact: true })).toBeVisible();
+
+  await page.evaluate(key => localStorage.setItem(key, "[]"), key);
+  await page.getByRole("button", { name: "Remove from saved", exact: true }).click();
+  expect(await page.evaluate(key => JSON.parse(localStorage.getItem(key)), key)).toEqual([]);
+  await expect(page.getByRole("button", { name: "Save story", exact: true })).toBeVisible();
+
+  await page.getByRole("button", { name: "Save story", exact: true }).click();
+  await page.getByRole("link", { name: "Saved (1)", exact: true }).click();
+  await expect(page.getByRole("button", { name: `Remove ${article.title} from saved stories`, exact: true })).toBeVisible();
+  await page.evaluate(key => localStorage.setItem(key, "[]"), key);
+  await page.getByRole("button", { name: `Remove ${article.title} from saved stories`, exact: true }).click();
+  expect(await page.evaluate(key => JSON.parse(localStorage.getItem(key)), key)).toEqual([]);
+  await expect(page.getByText("Your reading list is empty.", { exact: false })).toBeVisible();
+});
