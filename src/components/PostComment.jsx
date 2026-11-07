@@ -59,6 +59,7 @@ const PostComment = ({ article_id, setCommentList }) => {
             cols="50"
             rows="5"
             value={commentInput}
+            disabled={isSubmitting}
             onChange={handleChange}
             required
             maxLength={2000}
@@ -77,11 +78,11 @@ const PostComment = ({ article_id, setCommentList }) => {
       <div className={styles["message-container"]}>
         {isError && (
           <p className={styles["error-message"]} role="alert">
-            Error has occurred, please try again later
+            Your comment could not be confirmed. Check the discussion before submitting again.
           </p>
         )}
         {isPosted && (
-          <p className={styles["comment-posted"]}>
+          <p className={styles["comment-posted"]} role="status">
             Your comment has been posted
           </p>
         )}
