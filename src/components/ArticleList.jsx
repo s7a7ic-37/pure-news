@@ -29,8 +29,6 @@ const ArticleList = () => {
 
     fetchAllArticles(topicSelected, sortBySelected, orderSelected, page, querySelected)
       .then(({ articles, total_count }) => {
-        if (!Array.isArray(articles) || !Number.isInteger(total_count) || total_count < 0)
-          throw new Error("Invalid articles response");
         if (isCurrentRequest) {
           setArticleList(articles); setTotalCount(total_count);
           if (pageChangeRequested.current) {

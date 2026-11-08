@@ -45,11 +45,16 @@ test("a pending comment protects its text and adds the confirmed response once",
   expect(posts).toBe(1);
 });
 
-test("an unsuccessful comment keeps the draft and permits an explicit later submission", async ({ page }) => {
+for (const failure of ["unavailable", "malformed"]) {
+test(`a ${failure} comment response keeps the draft and permits an explicit later submission`, async ({ page }) => {
   let posts = 0;
+  const errors = [];
+  page.on("pageerror", error => errors.push(error.message));
   await openArticle(page, route => {
     posts += 1;
-    return route.fulfill({ status: 503, json: { msg: "Synthetic unavailable service" } });
+    return failure === "unavailable"
+      ? route.fulfill({ status: 503, json: { msg: "Synthetic unavailable service" } })
+      : route.fulfill({ status: 201, json: {comment: [{comment_id: 101, body: {unexpected: true}, author: "weegembump", votes: 0, created_at: "2020-01-01T12:00:00Z"}]} });
   });
   const input = page.getByLabel("Comment as weegembump", { exact: true });
   await input.fill(draft);
@@ -63,4 +68,6 @@ test("an unsuccessful comment keeps the draft and permits an explicit later subm
   await expect.poll(() => posts).toBe(2);
   await expect(input).toBeEnabled();
   await expect(input).toHaveValue(draft + " Edited after the failure.");
+  expect(errors).toEqual([]);
 });
+}

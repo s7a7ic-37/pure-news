@@ -17,7 +17,6 @@ const CommentList = ({ article_id }) => {
 
     fetchCommentsByArticle(article_id)
       .then(({ comments }) => {
-        if (!Array.isArray(comments)) throw new Error("Invalid comments response");
         if (isCurrentRequest) setCommentList(comments);
       })
       .catch(() => {

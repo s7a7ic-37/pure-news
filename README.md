@@ -9,6 +9,7 @@ A React news discussion app with topic filters, sorting, pagination, article vot
 - Shareable text/topic filters, sort order and page state, including browser Back support.
 - Article details, comment threads and sample-user selection.
 - A browser-local reading list of up to 50 saved links, with cross-tab updates and safe storage-failure states. Keyboard focus stays in the list after removal. Full articles still load from the API; saved links do not belong to sample identities.
+- Response checks keep malformed API data out of the interface. Failed reads offer retry; an unconfirmed comment keeps its draft.
 - Optimistic votes with rollback on failure.
 - Loading, retry and missing-article states.
 

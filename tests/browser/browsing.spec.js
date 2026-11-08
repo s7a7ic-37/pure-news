@@ -26,6 +26,25 @@ test.beforeEach(async ({ context }) => {
   });
 });
 
+test("a malformed article list retains browsing state and recovers through retry", async ({page}) => {
+  let reads = 0;
+  const errors = [];
+  page.on("pageerror", error => errors.push(error.message));
+  await page.route("**/api/articles?*", route => {
+    reads++;
+    return route.fulfill({json: {articles: reads === 1 ? [{...stories[0], title: {unexpected: true}}] : [stories[0]], total_count: 1}});
+  });
+  await page.goto("/?topic=coding&sort_by=title");
+  await expect(page.getByRole("alert")).toContainText("Articles could not be loaded");
+  expect(reads).toBe(1);
+  await page.getByRole("button", {name: "Retry", exact: true}).click();
+  await expect(page.locator("main li h3")).toHaveText(stories[0].title);
+  expect(new URL(page.url()).searchParams.get("topic")).toBe("coding");
+  expect(new URL(page.url()).searchParams.get("sort_by")).toBe("title");
+  expect(reads).toBe(2);
+  expect(errors).toEqual([]);
+});
+
 test("article text search is shareable, combines with filters, and resets the page", async ({ page }) => {
   await page.goto("/?topic=coding&sort_by=title&order=asc&p=2");
   const search = page.getByRole("search");

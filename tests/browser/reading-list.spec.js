@@ -45,6 +45,28 @@ test.beforeEach(async ({ context }) => {
   });
 });
 
+for (const kind of ["article", "comments"]) {
+  test(`malformed ${kind} reads keep the page available for explicit retry`, async ({page}) => {
+    let reads = 0;
+    const errors = [];
+    page.on("pageerror", error => errors.push(error.message));
+    await page.route("**/api/articles/1" + (kind === "comments" ? "/comments" : ""), route => {
+      reads++;
+      const invalid = kind === "article" ? {article: {...article, body: {unexpected: true}}} :
+        {comments: [{comment_id: 1, body: {unexpected: true}, author: "weegembump", votes: 0, created_at: article.created_at}]};
+      return route.fulfill({json: reads === 1 ? invalid : kind === "article" ? {article} : {comments: []}});
+    });
+    await page.goto("/articles/1");
+    await expect(page.getByRole("alert")).toContainText("could not be loaded right now");
+    expect(reads).toBe(1);
+    await page.getByRole("button", {name: kind === "article" ? "Retry article" : "Retry comments", exact: true}).click();
+    await expect(page.getByRole("heading", {name: article.title, exact: true})).toBeVisible();
+    await expect(page.getByLabel("Comment as weegembump", {exact: true})).toBeVisible();
+    expect(reads).toBe(2);
+    expect(errors).toEqual([]);
+  });
+}
+
 test("skip link is the first keyboard stop", async ({ page, browserName }) => {
   test.skip(browserName === "webkit" && process.platform === "win32", "Windows headless WebKit does not reliably advance Tab, including on plain HTML controls.");
   await page.goto("/saved");
