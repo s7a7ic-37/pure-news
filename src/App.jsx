@@ -44,10 +44,11 @@ function App() {
   return (
     <UserContext.Provider value={{ user, setUser }}>
       <div className={styles.container}>
+        <a className={styles.skipLink} href="#page-content">Skip to content</a>
         <Header />
         <Nav savedCount={saved.stories.length} />
-        {saved.error && <div className={styles.notice} role="alert"><p>{saved.error}</p><button type="button" onClick={() => setSaved(readReadingList())}>Retry reading list</button></div>}
-        <div>
+        <div id="page-content" tabIndex={-1}>
+          {saved.error && <div className={styles.notice} role="alert"><p>{saved.error}</p><button type="button" onClick={() => setSaved(readReadingList())}>Retry reading list</button></div>}
           <Routes>
             <Route path="/" element={<ArticleList />} />
             <Route path="/demo-user" element={<SignIn />} />

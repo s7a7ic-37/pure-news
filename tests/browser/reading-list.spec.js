@@ -18,6 +18,30 @@ test.beforeEach(async ({ context }) => {
   });
 });
 
+test("skip link is the first keyboard stop", async ({ page, browserName }) => {
+  test.skip(browserName === "webkit" && process.platform === "win32", "Windows headless WebKit does not reliably advance Tab, including on plain HTML controls.");
+  await page.goto("/saved");
+  const skip = page.getByRole("link", {name: "Skip to content", exact: true});
+  await expect(skip).toHaveCount(1);
+  await page.keyboard.press("Tab");
+  await expect(skip).toBeFocused();
+  await expect(skip).toBeInViewport();
+  await page.keyboard.press("Enter");
+  await expect(page.locator("#page-content")).toBeFocused();
+});
+
+test("skip activation reaches article, saved and missing-route content", async ({ page }) => {
+  for (const path of ["/articles/1", "/saved", "/not-a-route"]) {
+    await page.goto(path);
+    const skip = page.getByRole("link", {name: "Skip to content", exact: true});
+    await skip.focus();
+    await page.keyboard.press("Enter");
+    await expect(page.locator("#page-content")).toBeFocused();
+    await expect(page.locator("#page-content main")).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  }
+});
+
 test("a missing saved article keeps its link until the reader removes it", async ({ page }) => {
   await page.addInitScript(({ key, article }) => localStorage.setItem(key, JSON.stringify([
     { article_id: article.article_id, title: article.title, saved_at: "2026-01-01T12:00:00Z" },
