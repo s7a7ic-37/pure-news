@@ -1,6 +1,33 @@
 import { test, expect } from "@playwright/test";
 
 const key = "pure-news-saved-stories-v1";
+
+test("reading-list removals preserve keyboard position and failed writes retain focus", async ({ page }) => {
+  const stories = [1, 2, 3].map(article_id => ({article_id, title: `Fictional saved story ${article_id}`, saved_at: "2026-01-01T12:00:00Z"}));
+  await page.addInitScript(({key, stories}) => localStorage.setItem(key, JSON.stringify(stories)), {key, stories});
+  await page.goto("/saved");
+  const remove = number => page.getByRole("button", {name: `Remove Fictional saved story ${number} from saved stories`, exact: true});
+  async function removeStory(number) {
+    await remove(number).focus();
+    await page.keyboard.press("Enter");
+  }
+  await removeStory(2);
+  await expect(page.getByRole("link", {name: stories[2].title, exact: true})).toBeFocused();
+  await removeStory(3);
+  await expect(page.getByRole("link", {name: stories[0].title, exact: true})).toBeFocused();
+  await page.evaluate(() => {
+    window.restoreStorage = Storage.prototype.setItem;
+    Storage.prototype.setItem = () => {throw new DOMException("Synthetic storage failure", "QuotaExceededError");};
+  });
+  await removeStory(1);
+  await expect(remove(1)).toBeFocused();
+  await expect(page.getByRole("alert")).toContainText("Your previous reading list is unchanged");
+  await page.evaluate(() => {Storage.prototype.setItem = window.restoreStorage;});
+  await removeStory(1);
+  await expect(page.getByRole("heading", {name: "Saved stories", exact: true})).toBeFocused();
+  await expect(page.getByRole("link", {name: "Browse stories", exact: true})).toBeVisible();
+  expect(await page.evaluate(key => JSON.parse(localStorage.getItem(key)), key)).toEqual([]);
+});
 const article = {
   article_id: 1, title: "A synthetic reading-list story", topic: "coding",
   author: "weegembump", body: "Fictional browser-test content.",

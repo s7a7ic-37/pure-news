@@ -36,8 +36,10 @@ function App() {
       const next = setStorySaved(current, article, shouldSave);
       window.localStorage.setItem(SAVED_STORIES_KEY, JSON.stringify(next));
       setSaved({stories: next, error: ""});
+      return true;
     } catch (error) {
       setSaved((previous) => ({...previous, error: error instanceof ReadingListError ? error.message : "This change could not be saved in browser storage. Your previous reading list is unchanged."}));
+      return false;
     }
   }
 
