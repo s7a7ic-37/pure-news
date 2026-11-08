@@ -8,18 +8,19 @@ axios.defaults.adapter = async (config) => respond(config);
 const { fetchAllArticles, addComment, updateArticleVotes } = await import("./utils.js");
 axios.defaults.adapter = originalAdapter;
 
-test("article filters remain URL parameters and requests have a cold-start timeout", async () => {
+test("article filters and search remain URL parameters with a cold-start timeout", async () => {
   respond = (config) => {
     const url = new URL(config.url, config.baseURL);
     assert.equal(url.searchParams.get("topic"), "cooking&order=desc");
     assert.equal(url.searchParams.get("order"), "asc");
     assert.equal(url.searchParams.get("p"), "2");
     assert.equal(url.searchParams.get("limit"), "12");
+    assert.equal(url.searchParams.get("q"), "database & APIs");
     assert.equal(config.timeout, 90000);
     return { data: { articles: [] }, status: 200, config };
   };
   assert.deepEqual(
-    await fetchAllArticles("cooking&order=desc", "votes", "asc", 2),
+    await fetchAllArticles("cooking&order=desc", "votes", "asc", 2, "database & APIs"),
     { articles: [] },
   );
 });

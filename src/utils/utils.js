@@ -6,11 +6,12 @@ const apiUrl = axios.create({
     import.meta.env?.VITE_API_URL || "https://news.artemislab.co.uk/api",
 });
 
-export const fetchAllArticles = (topic, sortBy, order, page = 1) => {
+export const fetchAllArticles = (topic, sortBy, order, page = 1, query = "") => {
   const params = new URLSearchParams();
   if (topic) params.append("topic", topic);
   if (sortBy) params.append("sort_by", sortBy);
   if (order) params.append("order", order);
+  if (query) params.set("q", query);
   params.set("limit", "12");
   params.set("p", String(page));
 

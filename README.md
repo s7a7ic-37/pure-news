@@ -6,7 +6,7 @@ A React news discussion app with topic filters, sorting, pagination, article vot
 
 ## Features
 
-- Shareable article filters and page state, including browser Back support.
+- Shareable text/topic filters, sort order and page state, including browser Back support.
 - Article details, comment threads and sample-user selection.
 - A browser-local reading list of up to 50 saved links, with cross-tab updates and safe storage-failure states. Full articles still load from the API; saved links do not belong to sample identities.
 - Optimistic votes with rollback on failure.
@@ -23,7 +23,7 @@ npm ci
 npm run dev
 ```
 
-The default API is `https://news.artemislab.co.uk/api`. Set `VITE_API_URL` in an untracked `.env.local` file to use another API; include the `/api` path.
+The default API is `https://news.artemislab.co.uk/api`. Set `VITE_API_URL` in an untracked `.env.local` file to use another API; include the `/api` path. Search matches a case-insensitive phrase in article titles or bodies and can be combined with topic, sort and page filters.
 
 `npm test` runs vote, API-client and proxy checks. `npm run lint` checks the React source. `npm run build` creates `dist/`. Cloudflare hosts the frontend and forwards `/api` requests to the existing Express service on Render; its static-assets configuration handles page routes.
 

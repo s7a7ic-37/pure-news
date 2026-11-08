@@ -15,13 +15,54 @@ test.beforeEach(async ({ context }) => {
     if (pathname === "/api/articles") {
       expect(searchParams.get("limit")).toBe("12");
       const records = searchParams.get("topic") === "football" ? [football] : stories;
+      const query = searchParams.get("q")?.toLowerCase() || "";
+      const matching = records.filter(story => !query || story.title.toLowerCase().includes(query) || story.body.toLowerCase().includes(query));
       const page = Number(searchParams.get("p"));
-      return route.fulfill({ json: { articles: records.slice((page - 1) * 12, page * 12), total_count: records.length } });
+      return route.fulfill({ json: { articles: matching.slice((page - 1) * 12, page * 12), total_count: matching.length } });
     }
     if (pathname === "/api/articles/25") return route.fulfill({ json: { article: stories[24] } });
     if (pathname === "/api/articles/25/comments") return route.fulfill({ json: { comments: [] } });
     throw new Error("Unexpected synthetic API request: " + pathname);
   });
+});
+
+test("article text search is shareable, combines with filters, and resets the page", async ({ page }) => {
+  await page.goto("/?topic=coding&sort_by=title&order=asc&p=2");
+  const search = page.getByRole("search");
+  const input = page.getByLabel("Search stories", { exact: true });
+  await input.fill("STORY 25");
+  await search.getByRole("button", { name: "Search", exact: true }).click();
+  await expect(page).toHaveURL(/q=STORY\+25|q=STORY%2025/);
+  await expect(page.locator("main li")).toHaveCount(1);
+  await expect(page.locator("main li h3")).toHaveText("Synthetic story 25");
+  await expect(page.getByRole("status")).toHaveText("Page 1 of 1 · 1 article");
+  const params = new URL(page.url()).searchParams;
+  expect(params.get("topic")).toBe("coding");
+  expect(params.get("sort_by")).toBe("title");
+  expect(params.get("order")).toBe("asc");
+  expect(params.has("p")).toBe(false);
+  await page.locator("main li a").click();
+  await page.getByRole("link", { name: "← Back to these articles", exact: true }).click();
+  await expect(input).toHaveValue("STORY 25");
+  await expect(page.locator("main li h3")).toHaveText("Synthetic story 25");
+  await input.fill("no matching story");
+  await search.getByRole("button", { name: "Search", exact: true }).click();
+  await expect(page.getByText("No articles match this search.", { exact: true })).toBeVisible();
+  await expect(input).toHaveValue("no matching story");
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+
+test("search controls fit at phone, tablet and desktop widths", async ({ page }) => {
+  await page.goto("/");
+  const input = page.getByLabel("Search stories", { exact: true });
+  const button = page.getByRole("search").getByRole("button", { name: "Search", exact: true });
+  for (const width of [320, 390, 768, 1280]) {
+    await page.setViewportSize({ width, height: 900 });
+    expect(await page.evaluate(() => innerWidth)).toBe(width);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    expect((await button.boundingBox()).height).toBeGreaterThanOrEqual(44);
+    if (width <= 620) expect((await input.boundingBox()).height).toBeGreaterThanOrEqual(44);
+  }
 });
 
 test("reading preserves browsing filters and a lone final-page card keeps its column", async ({ page }) => {

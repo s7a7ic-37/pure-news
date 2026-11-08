@@ -4,6 +4,7 @@ export function readArticleQuery(params) {
   const page = params.get("p") || "1";
   return {
     topic: ["coding", "cooking", "football"].includes(topic) ? topic : "",
+    query: params.get("q") || "",
     sortBy: ["created_at", "title", "author", "votes", "comment_count"].includes(sortBy) ? sortBy : "created_at",
     order: params.get("order") === "asc" ? "asc" : "desc",
     page: /^[1-9]\d*$/.test(page) && Number(page) <= 100000 ? Number(page) : 1,

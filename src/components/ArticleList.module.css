@@ -6,6 +6,10 @@
 .filters { display: flex; flex-wrap: wrap; align-items: end; gap: 12px; padding: 20px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .filters { font-family: Arial,sans-serif; }
 .filters label, .order-field { display: grid; gap: 6px; font-size: 10px; letter-spacing: .04em; font-weight: 700; color: var(--muted); }
+.search { flex: 1 1 340px; display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: end; gap: 8px; min-width: 0; }
+.search input { width: 100%; min-width: 0; padding: 10px 14px; border: 1px solid #d8c7c7; border-radius: 0; background: var(--surface); color: var(--ink); font-size: 13px; }
+.search button { min-height: 44px; padding: 9px 16px; border: 1px solid #d8c7c7; border-radius: 0; background: var(--surface); color: var(--ink); cursor: pointer; }
+.search button:hover { background: var(--nav,#f1e5e7); }
 .dropdown, .order-button { padding: 10px 14px; border: 1px solid #d8c7c7; border-radius: 0; background: var(--surface); color: var(--ink); font-size: 13px; }
 .order-button { cursor: pointer; }
 .order-button:hover { background: var(--nav,#f1e5e7); }
@@ -23,6 +27,8 @@
 @media(max-width:620px) { .article-list { margin-top: 32px; } .intro { display: block; } .intro > p { margin: 18px 0 0; max-width: none; } .article-card-list { grid-template-columns: 1fr; gap: 18px; } .catalogue { display: none; } .filters { gap: 10px; } }
 @media(max-width:620px) {
   .filters { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) 44px; padding: 14px 0; }
+  .search { grid-column: 1 / -1; }
+  .search input { min-height: 44px; font-size: 16px; }
   .dropdown { width: 100%; min-width: 0; padding-left: 8px; padding-right: 8px; }
   .order-button { padding: 8px; font-size: 20px; }
   .order-text { display: none; }
