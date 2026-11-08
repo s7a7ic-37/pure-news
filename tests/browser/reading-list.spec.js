@@ -18,6 +18,44 @@ test.beforeEach(async ({ context }) => {
   });
 });
 
+test("a missing saved article keeps its link until the reader removes it", async ({ page }) => {
+  await page.addInitScript(({ key, article }) => localStorage.setItem(key, JSON.stringify([
+    { article_id: article.article_id, title: article.title, saved_at: "2026-01-01T12:00:00Z" },
+  ])), { key, article });
+  await page.route("**/api/articles/1", route => route.fulfill({ status: 404, json: { message: "Synthetic missing article" } }));
+  await page.goto("/saved");
+  await page.getByRole("link", { name: article.title, exact: true }).click();
+  await expect(page.getByRole("alert")).toContainText("This article does not exist");
+  await expect(page.getByRole("button", { name: "Retry article", exact: true })).toHaveCount(0);
+  expect(await page.evaluate(key => JSON.parse(localStorage.getItem(key)).length, key)).toBe(1);
+  await page.getByRole("link", { name: "Back to saved stories", exact: true }).click();
+  await expect(page.getByRole("link", { name: article.title, exact: true })).toBeVisible();
+  await page.getByRole("button", { name: `Remove ${article.title} from saved stories`, exact: true }).click();
+  await expect(page.getByText("Your reading list is empty.", { exact: false })).toBeVisible();
+});
+
+test("a saved article recovers from a temporary failure through explicit retry", async ({ page }) => {
+  const previous = [{ article_id: article.article_id, title: article.title, saved_at: "2026-01-01T12:00:00Z" }];
+  await page.addInitScript(({ key, previous }) => localStorage.setItem(key, JSON.stringify(previous)), { key, previous });
+  let attempts = 0;
+  await page.route("**/api/articles/1", route => {
+    attempts += 1;
+    return attempts === 1
+      ? route.fulfill({ status: 503, json: { message: "Synthetic temporary outage" } })
+      : route.fulfill({ json: { article } });
+  });
+  await page.goto("/saved");
+  await page.getByRole("link", { name: article.title, exact: true }).click();
+  await expect(page.getByRole("alert")).toContainText("could not be loaded right now");
+  expect(attempts).toBe(1);
+  await page.getByRole("button", { name: "Retry article", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Remove from saved", exact: true })).toBeVisible();
+  expect(attempts).toBe(2);
+  expect(await page.evaluate(key => JSON.parse(localStorage.getItem(key)), key)).toEqual(previous);
+  await page.getByRole("link", { name: "← Back to saved stories", exact: true }).click();
+  await expect(page.getByRole("link", { name: article.title, exact: true })).toBeVisible();
+});
+
 test("built styles and saved links survive reload and synchronize between tabs", async ({ page, context }) => {
   await page.goto("/articles/1");
   await expect(page.locator("body")).toHaveCSS("margin", "0px");
