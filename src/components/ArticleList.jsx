@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { fetchAllArticles, isTransientArticleFailure } from "../utils/utils";
 import ArticleCard from "./ArticleCard";
 import { Link, useLocation, useSearchParams } from "react-router-dom";
@@ -22,7 +22,8 @@ const ArticleList = () => {
   const searchArticles = (event) => { event.preventDefault(); updateQuery("q", queryInput.trim()); };
   const goToPage = (value) => { pageChangeRequested.current = true; updateQuery("p", String(value)); };
 
-  useEffect(() => setQueryInput(querySelected), [querySelected]);
+  // Synchronise the field before the browser can accept an edit after navigation.
+  useLayoutEffect(() => setQueryInput(querySelected), [querySelected]);
 
   useEffect(() => {
     let isCurrentRequest = true;

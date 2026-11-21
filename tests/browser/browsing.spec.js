@@ -72,6 +72,27 @@ test("article text search is shareable, combines with filters, and resets the pa
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 
+test("typing as the search field mounts survives the initial feed load", async ({ page }) => {
+  await page.addInitScript(() => {
+    const observer = new MutationObserver(() => {
+      const input = document.getElementById("article-search");
+      if (!input) return;
+      observer.disconnect();
+      // This delivers the edit just after mount, before pending passive effects.
+      const setValue = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value").set;
+      setValue.call(input, "STORY 25");
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+    });
+    observer.observe(document, { childList: true, subtree: true });
+  });
+  await page.goto("/?topic=coding&sort_by=title&order=asc&p=2");
+  await expect(page.getByRole("status")).toHaveText("Page 2 of 3 · 25 articles");
+  await expect(page.getByLabel("Search stories")).toHaveValue("STORY 25");
+  await page.getByRole("button", { name: "Search", exact: true }).click();
+  expect(new URL(page.url()).searchParams.get("q")).toBe("STORY 25");
+  await expect(page.getByRole("heading", { name: "Synthetic story 25" })).toBeVisible();
+});
+
 test("search controls fit at phone, tablet and desktop widths", async ({ page }) => {
   await page.goto("/");
   const input = page.getByLabel("Search stories", { exact: true });
