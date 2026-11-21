@@ -188,6 +188,27 @@ test("a temporary outage keeps only the matching previously loaded result page",
   expect(requests).toBe(5);
 });
 
+test("the sample edition can open before the live feed responds", async ({ page }) => {
+  let finish;
+  const pending = new Promise(resolve => { finish = resolve; });
+  await page.route("**/api/articles?*", async route => {
+    await pending;
+    await route.fulfill({ status: 503, body: "Simulated unavailable feed" });
+  });
+  try {
+    await page.goto("/home?topic=football");
+    await expect(page.getByRole("status")).toContainText("Loading stories");
+    const sample = page.getByRole("link", { name: "Read sample edition", exact: true });
+    await expect(sample).toBeVisible({ timeout: 1500 });
+    await sample.click();
+    await expect(page.getByRole("heading", { name: "Sample edition", exact: true })).toBeFocused();
+    await expect(page.getByRole("article")).toHaveCount(3);
+    await expect(page.getByRole("main").getByRole("link")).toHaveAttribute("href", "/home?topic=football");
+  } finally {
+    finish();
+  }
+});
+
 test("a first read can open the fictional edition and return to retry the original feed", async ({ page, context }) => {
   const browseUrl = "/home?topic=coding&q=library&sort_by=title&order=asc&p=3";
   let responseStatus = 429;

@@ -68,7 +68,7 @@ const ArticleList = () => {
   };
 
   return (
-    <main className={styles["article-list"]} aria-busy={isLoading}>
+    <main className={styles["article-list"]}>
       <div className={styles.intro}>
         <h2 ref={headingRef} tabIndex="-1" className={styles["article-list-title"]}>Latest stories</h2>
       </div>
@@ -122,12 +122,17 @@ const ArticleList = () => {
         </div>
         <span className={styles.catalogue}>CODE / FOOD / FOOTBALL</span>
       </div>
-      {isLoading ? <div className={styles.notice} role="status"><strong>Finding your next read…</strong><p>The free demo API may take about a minute to wake.</p></div> : error ? (
+      {isLoading || error ? (
         <div className={styles.notice}>
-          <p role="alert">{error.message}</p>
+          {isLoading ? (
+            <div role="status">
+              <strong>Loading stories…</strong>
+              <p>The news service can take about a minute to start.</p>
+            </div>
+          ) : <p role="alert">{error.message}</p>}
           <div className={styles["notice-actions"]}>
-            <button type="button" onClick={() => setRetryCount((count) => count + 1)}>Retry</button>
-            {error.showSample && (
+            {!isLoading && <button type="button" onClick={() => setRetryCount((count) => count + 1)}>Retry</button>}
+            {(isLoading ? articleList.length === 0 : error.showSample) && (
               <Link
                 to="/sample-edition"
                 state={{ browsePath: pathname, browseSearch: searchParams.toString() }}
