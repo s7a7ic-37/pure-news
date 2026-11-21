@@ -4,7 +4,7 @@ import { getVoteUpdate } from "../utils/votes";
 import styles from "./SingleArticleCard.module.css";
 import { formatPostedAt } from "../utils/formatPostedAt";
 
-const SingleArticleCard = ({ presentArticle }) => {
+const SingleArticleCard = ({ presentArticle, readOnly }) => {
   const {
     article_id,
     title,
@@ -64,7 +64,7 @@ const SingleArticleCard = ({ presentArticle }) => {
           alt=""
         />
         <article className={styles["article-body"]}>{body}</article>
-        <div className={styles["vote-box"]}>
+        {!readOnly && <div className={styles["vote-box"]}>
           <button
             type="button"
             className={styles["vote-button"]}
@@ -86,7 +86,7 @@ const SingleArticleCard = ({ presentArticle }) => {
           >
             -
           </button>
-        </div>
+        </div>}
         {isUpdating && <p role="status" className={styles["error-message"]}>Saving vote…</p>}
         {isError && (
           <p className={styles["error-message"]} role="alert">

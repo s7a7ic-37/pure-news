@@ -9,6 +9,7 @@ const ArticleList = () => {
   const [articleList, setArticleList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const [showingSnapshot, setShowingSnapshot] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
   const [searchParams, setSearchParams] = useSearchParams();
   const { topic: topicSelected, query: querySelected, sortBy: sortBySelected, order: orderSelected, page } = readArticleQuery(searchParams);
@@ -28,20 +29,24 @@ const ArticleList = () => {
     setError("");
 
     fetchAllArticles(topicSelected, sortBySelected, orderSelected, page, querySelected)
-      .then(({ articles, total_count }) => {
+      .then(({ articles, total_count, cachedAt }) => {
         if (isCurrentRequest) {
           setArticleList(articles); setTotalCount(total_count);
+          setShowingSnapshot(Boolean(cachedAt));
           if (pageChangeRequested.current) {
             headingRef.current?.focus();
             pageChangeRequested.current = false;
           }
         }
       })
-      .catch(() => {
+      .catch((failure) => {
         if (isCurrentRequest) {
           pageChangeRequested.current = false;
           setArticleList([]);
-          setError("Articles could not be loaded. The news service may be unavailable.");
+          setShowingSnapshot(false);
+          setError(failure.response?.status === 429
+            ? "Articles could not be loaded. The news service is limiting connections. Wait a minute, then retry."
+            : "Articles could not be loaded. The news service may be unavailable.");
         }
       })
       .finally(() => {
@@ -62,6 +67,11 @@ const ArticleList = () => {
       <div className={styles.intro}>
         <h2 ref={headingRef} tabIndex="-1" className={styles["article-list-title"]}>Latest stories</h2>
       </div>
+      {!isLoading && showingSnapshot && (
+        <p role="alert">
+          Showing results loaded earlier in this tab. <button type="button" onClick={() => setRetryCount((count) => count + 1)}>Retry</button>
+        </p>
+      )}
       <div className={styles.filters}>
         <form className={styles.search} role="search" onSubmit={searchArticles}>
           <label htmlFor="article-search">Search stories

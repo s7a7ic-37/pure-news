@@ -1,4 +1,5 @@
 import axios from "axios";
+import { readArticleSnapshot, updateArticleSnapshot } from "./articleSnapshots.js";
 
 const apiUrl = axios.create({
   timeout: 90000,
@@ -14,6 +15,26 @@ const isComment = (comment) => comment && Number.isSafeInteger(comment.comment_i
   ["body", "author", "created_at"].every(key => typeof comment[key] === "string") &&
   Number.isSafeInteger(comment.votes) && Number.isFinite(Date.parse(comment.created_at));
 
+async function readArticles(path, isValid, invalidMessage) {
+  const snapshotKey = apiUrl.getUri({ url: path });
+  let data;
+  try {
+    ({ data } = await apiUrl.get(path));
+  } catch (failure) {
+    const status = failure.response?.status;
+    if ([400, 404, 410].includes(status)) updateArticleSnapshot(snapshotKey);
+    if ([408, 429, 502, 503, 504].includes(status) ||
+        ["ERR_NETWORK", "ECONNABORTED", "ETIMEDOUT"].includes(failure.code)) {
+      const saved = readArticleSnapshot(snapshotKey);
+      if (saved && isValid(saved.data)) return { ...saved.data, cachedAt: saved.at };
+    }
+    throw failure;
+  }
+  if (!isValid(data)) throw new Error(invalidMessage);
+  updateArticleSnapshot(snapshotKey, data);
+  return data;
+}
+
 export const fetchAllArticles = (topic, sortBy, order, page = 1, query = "") => {
   const params = new URLSearchParams();
   if (topic) params.append("topic", topic);
@@ -23,20 +44,17 @@ export const fetchAllArticles = (topic, sortBy, order, page = 1, query = "") => 
   params.set("limit", "12");
   params.set("p", String(page));
 
-  return apiUrl.get("/articles?" + params).then(({ data }) => {
-    if (!Array.isArray(data?.articles) ||
-        !data.articles.every(article => isArticle(article) && Number.isSafeInteger(article.comment_count) && article.comment_count >= 0) ||
-        !Number.isSafeInteger(data.total_count) || data.total_count < 0)
-      throw new Error("Invalid articles response");
-    return data;
-  });
+  return readArticles("/articles?" + params, data =>
+    Array.isArray(data?.articles) &&
+    data.articles.every(article => isArticle(article) && Number.isSafeInteger(article.comment_count) && article.comment_count >= 0) &&
+    Number.isSafeInteger(data.total_count) && data.total_count >= 0,
+  "Invalid articles response");
 };
 
 export const fetchArticleById = (article_id) =>
-  apiUrl.get("/articles/" + article_id).then(({ data }) => {
-    if (!isArticle(data?.article) || typeof data.article.body !== "string") throw new Error("Invalid article response");
-    return data;
-  });
+  readArticles("/articles/" + article_id, data => isArticle(data?.article) &&
+    data.article.article_id === Number(article_id) && typeof data.article.body === "string",
+  "Invalid article response");
 
 export const fetchCommentsByArticle = (article_id) =>
   apiUrl.get("/articles/" + article_id + "/comments").then(({ data }) => {

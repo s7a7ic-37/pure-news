@@ -127,3 +127,82 @@ test("an out-of-range shared page recovers to the first page and focuses its hea
   expect(new URL(page.url()).searchParams.get("topic")).toBe("coding");
   expect(new URL(page.url()).searchParams.has("p")).toBe(false);
 });
+
+test("a temporary outage keeps only the matching previously loaded result page", async ({ page }) => {
+  let offline = false;
+  let requests = 0;
+  await page.route("**/api/articles?*", route => {
+    requests++;
+    const { searchParams } = new URL(route.request().url());
+    expect(route.request().method()).toBe("GET");
+    if (offline) return route.fulfill({ status: 429, body: "Temporarily limiting connections" });
+    expect(searchParams.get("topic")).toBe("coding");
+    expect(searchParams.get("p")).toBe("3");
+    expect(searchParams.get("sort_by")).toBe("title");
+    expect(searchParams.get("order")).toBe("asc");
+    return route.fulfill({ json: { articles: [stories[24]], total_count: 25 } });
+  });
+  const selected = "/?topic=coding&sort_by=title&order=asc&p=3";
+  await page.goto(selected);
+  await expect(page.getByRole("heading", { name: stories[24].title })).toBeVisible();
+  offline = true;
+  await page.reload();
+  await expect(page.getByRole("alert")).toContainText("Showing results loaded earlier in this tab.");
+  await expect(page.getByRole("heading", { name: stories[24].title })).toBeVisible();
+  await expect(page.getByRole("status")).toHaveText("Page 3 of 3 · 25 articles");
+  expect(requests).toBe(2);
+
+  await page.goto("/?topic=football");
+  await expect(page.getByRole("alert")).toContainText("limiting connections");
+  await expect(page.locator("main li h3")).toHaveCount(0);
+  await page.goto(selected);
+  await expect(page.getByRole("alert")).toContainText("Showing results loaded earlier in this tab.");
+  offline = false;
+  await page.getByRole("button", { name: "Retry", exact: true }).click();
+  await expect(page.getByRole("alert")).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: stories[24].title })).toBeVisible();
+  expect(new URL(page.url()).search).toBe(selected.slice(1));
+  expect(requests).toBe(5);
+});
+
+test("a previously opened article stays readable without voting or comments during an outage", async ({ page }) => {
+  let status = 200;
+  let articleRequests = 0;
+  let commentRequests = 0;
+  await page.route("**/api/articles/25", route => {
+    articleRequests++;
+    expect(route.request().method()).toBe("GET");
+    return route.fulfill({ status, json: status === 200 ? { article: stories[24] } : { message: "Unavailable" } });
+  });
+  await page.route("**/api/articles/25/comments", route => {
+    expect(route.request().method()).toBe("GET");
+    commentRequests++;
+    return route.fulfill({ json: { comments: [] } });
+  });
+
+  await page.goto("/articles/25");
+  await expect(page.getByRole("button", { name: "Upvote article" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Comments" })).toBeVisible();
+  status = 429;
+  await page.reload();
+  await expect(page.getByRole("alert")).toContainText("Reading a copy loaded earlier in this tab.");
+  await expect(page.getByText(stories[24].body, { exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Upvote article" })).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: "Comments" })).toHaveCount(0);
+  expect(commentRequests).toBe(1);
+  expect(articleRequests).toBe(2);
+  status = 200;
+  await page.getByRole("button", { name: "Retry article", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Upvote article" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Comments" })).toBeVisible();
+  expect(commentRequests).toBe(2);
+  expect(articleRequests).toBe(3);
+
+  status = 404;
+  await page.reload();
+  await expect(page.getByRole("alert")).toContainText("This article does not exist");
+  status = 429;
+  await page.reload();
+  await expect(page.getByRole("alert")).toContainText("limiting connections");
+  await expect(page.getByText(stories[24].body, { exact: true })).toHaveCount(0);
+});

@@ -9,6 +9,7 @@ const SingleArticle = ({ savedStories, onSaveStory }) => {
   const [presentArticle, setPresentArticle] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const [showingSnapshot, setShowingSnapshot] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
   const { article_id } = useParams();
   const { state } = useLocation();
@@ -21,15 +22,18 @@ const SingleArticle = ({ savedStories, onSaveStory }) => {
     setPresentArticle(null);
 
     fetchArticleById(article_id)
-      .then(({ article }) => {
-        if (isCurrentRequest) setPresentArticle(article);
+      .then(({ article, cachedAt }) => {
+        if (isCurrentRequest) {
+          setPresentArticle(article);
+          setShowingSnapshot(Boolean(cachedAt));
+        }
       })
       .catch((failure) => {
         if (isCurrentRequest)
           setError(
-            [400, 404].includes(failure.response?.status)
+            [400, 404, 410].includes(failure.response?.status)
               ? "missing"
-              : "unavailable",
+              : failure.response?.status === 429 ? "limited" : "unavailable",
           );
       })
       .finally(() => {
@@ -55,6 +59,8 @@ const SingleArticle = ({ savedStories, onSaveStory }) => {
         <p role="alert">
           {error === "missing"
             ? "This article does not exist. Check the link or browse the article list."
+            : error === "limited"
+              ? "The news service is limiting connections. Wait a minute, then retry."
             : "This article could not be loaded right now."}
         </p>
         {error !== "missing" && (
@@ -80,8 +86,14 @@ const SingleArticle = ({ savedStories, onSaveStory }) => {
           {isSaved ? "Remove from saved" : "Save story"}
         </button>
       </div>
-      <SingleArticleCard key={article_id} presentArticle={presentArticle} />
-      <CommentList key={article_id} article_id={article_id} />
+      {showingSnapshot && (
+        <p role="alert">
+          Reading a copy loaded earlier in this tab. Voting and comments need a live connection.{" "}
+          <button type="button" onClick={() => setRetryCount((count) => count + 1)}>Retry article</button>
+        </p>
+      )}
+      <SingleArticleCard key={article_id} presentArticle={presentArticle} readOnly={showingSnapshot} />
+      {!showingSnapshot && <CommentList key={article_id} article_id={article_id} />}
     </main>
   );
 };
