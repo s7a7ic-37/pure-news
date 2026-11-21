@@ -11,6 +11,7 @@ A React news discussion app with topic filters, sorting, pagination, article vot
 - A browser-local reading list of up to 50 saved links, with cross-tab updates and safe storage-failure states. Keyboard focus stays in the list after removal. Full articles still load from the API; saved links do not belong to sample identities.
 - Response checks keep malformed API data out of the interface. Failed reads offer retry; an unconfirmed comment keeps its draft.
 - During a temporary outage, a tab can show an exact results page or article it loaded earlier within six hours. Cached articles have voting and comments off.
+- If that results page is unavailable, readers can open a separate read-only edition of original fictional stories.
 - Optimistic votes with rollback on failure.
 - Loading, retry and missing-article states.
 

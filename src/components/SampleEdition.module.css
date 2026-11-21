@@ -1,0 +1,5 @@
+.back { display: inline-flex; align-items: center; min-height: 44px; margin-bottom: 12px; font: 600 14px Arial,sans-serif; }
+.note { margin: 12px 0 0; color: var(--muted); }
+.story { height: 100%; padding: clamp(16px, 2vw, 24px); border-top: 2px solid var(--accent); border-bottom: 1px solid var(--line); background: var(--surface); }
+.story p { margin: 0; line-height: 1.55; }
+.story p + p { margin-top: 12px; }

@@ -36,6 +36,7 @@ test("a malformed article list retains browsing state and recovers through retry
   });
   await page.goto("/?topic=coding&sort_by=title");
   await expect(page.getByRole("alert")).toContainText("Articles could not be loaded");
+  await expect(page.getByRole("link", { name: "Read sample edition" })).toHaveCount(0);
   expect(reads).toBe(1);
   await page.getByRole("button", {name: "Retry", exact: true}).click();
   await expect(page.locator("main li h3")).toHaveText(stories[0].title);
@@ -148,6 +149,7 @@ test("a temporary outage keeps only the matching previously loaded result page",
   offline = true;
   await page.reload();
   await expect(page.getByRole("alert")).toContainText("Showing results loaded earlier in this tab.");
+  await expect(page.getByRole("link", { name: "Read sample edition" })).toHaveCount(0);
   await expect(page.getByRole("heading", { name: stories[24].title })).toBeVisible();
   await expect(page.getByRole("status")).toHaveText("Page 3 of 3 · 25 articles");
   expect(requests).toBe(2);
@@ -163,6 +165,61 @@ test("a temporary outage keeps only the matching previously loaded result page",
   await expect(page.getByRole("heading", { name: stories[24].title })).toBeVisible();
   expect(new URL(page.url()).search).toBe(selected.slice(1));
   expect(requests).toBe(5);
+});
+
+test("a first read can open the fictional edition and return to retry the original feed", async ({ page, context }) => {
+  const browseUrl = "/home?topic=coding&q=library&sort_by=title&order=asc&p=3";
+  let responseStatus = 429;
+  let reads = 0;
+  await page.route("**/api/articles?*", route => {
+    reads++;
+    expect(route.request().method()).toBe("GET");
+    const { searchParams } = new URL(route.request().url());
+    expect(searchParams.get("topic")).toBe("coding");
+    expect(searchParams.get("q")).toBe("library");
+    expect(searchParams.get("p")).toBe("3");
+    return responseStatus === 429
+      ? route.fulfill({ status: 429, body: "Temporarily limiting connections" })
+      : route.fulfill({ json: { articles: [stories[24]], total_count: 25 } });
+  });
+
+  await page.goto(browseUrl);
+  await expect(page.getByRole("alert")).toContainText("limiting connections");
+  const sampleLink = page.getByRole("link", { name: "Read sample edition", exact: true });
+  await expect(sampleLink).toHaveCount(1);
+  const requests = [];
+  page.on("request", request => requests.push(request.url()));
+  await sampleLink.click();
+  const edition = page.getByRole("main");
+  await expect(page).toHaveURL(/\/sample-edition$/);
+  await expect(edition.getByRole("heading", { name: "Sample edition" })).toBeFocused();
+  await expect(edition.getByText("Three fictional stories in a read-only edition.")).toBeVisible();
+  await expect(edition.getByRole("article")).toHaveCount(3);
+  await expect(edition.locator("img, time, button, form")).toHaveCount(0);
+  await expect(edition.getByRole("link")).toHaveCount(1);
+  await expect(page.getByRole("link", { name: /Switch identity|Saved \(/ })).toHaveCount(0);
+  expect(requests).toEqual([]);
+  expect(await context.cookies()).toEqual([]);
+  expect(await page.evaluate(() => [localStorage.length, sessionStorage.length])).toEqual([0, 0]);
+
+  const initial = page.viewportSize();
+  for (const width of initial.width === 390 ? [320, 390] : [initial.width]) {
+    await page.setViewportSize({ ...initial, width });
+    const measured = await page.evaluate(() => [innerWidth, document.documentElement.scrollWidth]);
+    expect(measured).toEqual([width, width]);
+  }
+
+  await page.reload();
+  await expect(edition.getByRole("article")).toHaveCount(3);
+  expect(reads).toBe(1);
+  await edition.getByRole("link", { name: "← Back to live feed" }).click();
+  expect(new URL(page.url()).pathname + new URL(page.url()).search).toBe(browseUrl);
+  await expect(page.getByRole("alert")).toContainText("limiting connections");
+  responseStatus = 200;
+  await page.getByRole("button", { name: "Retry", exact: true }).click();
+  await expect(page.getByRole("heading", { name: stories[24].title })).toBeVisible();
+  await expect(sampleLink).toHaveCount(0);
+  expect(reads).toBe(3);
 });
 
 test("a previously opened article stays readable without voting or comments during an outage", async ({ page }) => {

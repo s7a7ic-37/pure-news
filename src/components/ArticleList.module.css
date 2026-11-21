@@ -23,6 +23,9 @@
 .pagination button { padding: 10px 16px; border: 1px solid #d8c7c7; border-radius: 0; background: var(--surface); cursor: pointer; }
 .notice { padding: 32px; margin: 26px 0; border: 1px solid var(--line); border-radius: 0; background: var(--surface); line-height: 1.6; }
 .notice p { color: var(--muted); }
+.notice-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; }
+.notice-actions button { padding: 8px 16px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; }
+.notice-actions a { display: inline-flex; align-items: center; min-height: 44px; font: 600 14px Arial,sans-serif; }
 @media(max-width:950px) { .article-card-list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media(max-width:620px) { .article-list { margin-top: 32px; } .intro { display: block; } .intro > p { margin: 18px 0 0; max-width: none; } .article-card-list { grid-template-columns: 1fr; gap: 18px; } .catalogue { display: none; } .filters { gap: 10px; } }
 @media(max-width:620px) {

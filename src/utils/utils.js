@@ -15,6 +15,10 @@ const isComment = (comment) => comment && Number.isSafeInteger(comment.comment_i
   ["body", "author", "created_at"].every(key => typeof comment[key] === "string") &&
   Number.isSafeInteger(comment.votes) && Number.isFinite(Date.parse(comment.created_at));
 
+export const isTransientArticleFailure = (failure) =>
+  [408, 429, 502, 503, 504].includes(failure.response?.status) ||
+  ["ERR_NETWORK", "ECONNABORTED", "ETIMEDOUT"].includes(failure.code);
+
 async function readArticles(path, isValid, invalidMessage) {
   const snapshotKey = apiUrl.getUri({ url: path });
   let data;
@@ -23,8 +27,7 @@ async function readArticles(path, isValid, invalidMessage) {
   } catch (failure) {
     const status = failure.response?.status;
     if ([400, 404, 410].includes(status)) updateArticleSnapshot(snapshotKey);
-    if ([408, 429, 502, 503, 504].includes(status) ||
-        ["ERR_NETWORK", "ECONNABORTED", "ETIMEDOUT"].includes(failure.code)) {
+    if (isTransientArticleFailure(failure)) {
       const saved = readArticleSnapshot(snapshotKey);
       if (saved && isValid(saved.data)) return { ...saved.data, cachedAt: saved.at };
     }

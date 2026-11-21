@@ -1,17 +1,18 @@
 import { useEffect, useRef, useState } from "react";
-import { fetchAllArticles } from "../utils/utils";
+import { fetchAllArticles, isTransientArticleFailure } from "../utils/utils";
 import ArticleCard from "./ArticleCard";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
 import { readArticleQuery, updateArticleQuery } from "../utils/articleQuery";
 import styles from "./ArticleList.module.css";
 
 const ArticleList = () => {
   const [articleList, setArticleList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState(null);
   const [showingSnapshot, setShowingSnapshot] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
   const [searchParams, setSearchParams] = useSearchParams();
+  const { pathname } = useLocation();
   const { topic: topicSelected, query: querySelected, sortBy: sortBySelected, order: orderSelected, page } = readArticleQuery(searchParams);
   const [queryInput, setQueryInput] = useState(querySelected);
   const [totalCount, setTotalCount] = useState(0);
@@ -26,7 +27,7 @@ const ArticleList = () => {
   useEffect(() => {
     let isCurrentRequest = true;
     setIsLoading(true);
-    setError("");
+    setError(null);
 
     fetchAllArticles(topicSelected, sortBySelected, orderSelected, page, querySelected)
       .then(({ articles, total_count, cachedAt }) => {
@@ -44,9 +45,12 @@ const ArticleList = () => {
           pageChangeRequested.current = false;
           setArticleList([]);
           setShowingSnapshot(false);
-          setError(failure.response?.status === 429
-            ? "Articles could not be loaded. The news service is limiting connections. Wait a minute, then retry."
-            : "Articles could not be loaded. The news service may be unavailable.");
+          setError({
+            message: failure.response?.status === 429
+              ? "Articles could not be loaded. The news service is limiting connections. Wait a minute, then retry."
+              : "Articles could not be loaded. The news service may be unavailable.",
+            showSample: isTransientArticleFailure(failure),
+          });
         }
       })
       .finally(() => {
@@ -118,9 +122,20 @@ const ArticleList = () => {
         <span className={styles.catalogue}>CODE / FOOD / FOOTBALL</span>
       </div>
       {isLoading ? <div className={styles.notice} role="status"><strong>Finding your next read…</strong><p>The free demo API may take about a minute to wake.</p></div> : error ? (
-        <p role="alert">
-          {error} <button type="button" onClick={() => setRetryCount((count) => count + 1)}>Retry</button>
-        </p>
+        <div className={styles.notice}>
+          <p role="alert">{error.message}</p>
+          <div className={styles["notice-actions"]}>
+            <button type="button" onClick={() => setRetryCount((count) => count + 1)}>Retry</button>
+            {error.showSample && (
+              <Link
+                to="/sample-edition"
+                state={{ browsePath: pathname, browseSearch: searchParams.toString() }}
+              >
+                Read sample edition
+              </Link>
+            )}
+          </div>
+        </div>
       ) : articleList.length === 0 ? (
         <p>{totalCount ? "This page is beyond the available articles." : querySelected ? "No articles match this search." : "No articles match this selection."}</p>
       ) : (

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, Route, Routes } from "react-router-dom";
+import { Link, Route, Routes, useMatch } from "react-router-dom";
 import styles from "./App.module.css";
 import { UserContext } from "./contexts/UserContext";
 import Header from "./components/Header";
@@ -8,6 +8,7 @@ import Nav from "./components/Nav";
 import ArticleList from "./components/ArticleList";
 import SingleArticle from "./components/SingleArticle";
 import SavedStories from "./components/SavedStories";
+import SampleEdition from "./components/SampleEdition";
 import { SAVED_STORIES_KEY, parseSavedStories, setStorySaved, ReadingListError } from "./utils/savedStories";
 
 function readReadingList() {
@@ -21,6 +22,7 @@ function readReadingList() {
 function App() {
   const [user, setUser] = useState("weegembump");
   const [saved, setSaved] = useState(readReadingList);
+  const showingSample = Boolean(useMatch("/sample-edition"));
 
   useEffect(() => {
     const sync = (event) => {
@@ -48,13 +50,14 @@ function App() {
       <div className={styles.container}>
         <a className={styles.skipLink} href="#page-content">Skip to content</a>
         <Header />
-        <Nav savedCount={saved.stories.length} />
+        <Nav savedCount={saved.stories.length} readOnly={showingSample} />
         <div id="page-content" tabIndex={-1}>
-          {saved.error && <div className={styles.notice} role="alert"><p>{saved.error}</p><button type="button" onClick={() => setSaved(readReadingList())}>Retry reading list</button></div>}
+          {!showingSample && saved.error && <div className={styles.notice} role="alert"><p>{saved.error}</p><button type="button" onClick={() => setSaved(readReadingList())}>Retry reading list</button></div>}
           <Routes>
             <Route path="/" element={<ArticleList />} />
             <Route path="/demo-user" element={<SignIn />} />
             <Route path="/home" element={<ArticleList />} />
+            <Route path="/sample-edition" element={<SampleEdition />} />
             <Route path="/articles/:article_id" element={<SingleArticle savedStories={saved.stories} onSaveStory={saveStory} />} />
             <Route path="/saved" element={<SavedStories stories={saved.stories} onSaveStory={saveStory} />} />
             <Route
