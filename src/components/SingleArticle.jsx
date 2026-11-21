@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
-import { fetchArticleById } from "../utils/utils";
+import { fetchArticleById, isTransientArticleFailure } from "../utils/utils";
 import SingleArticleCard from "./SingleArticleCard";
 import CommentList from "./CommentList";
 import styles from "./SingleArticle.module.css";
@@ -12,8 +12,13 @@ const SingleArticle = ({ savedStories, onSaveStory }) => {
   const [showingSnapshot, setShowingSnapshot] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
   const { article_id } = useParams();
-  const { state } = useLocation();
+  const { pathname, search, hash, state } = useLocation();
   const backToArticles = state?.fromSaved ? "/saved" : { pathname: "/", search: state?.browseSearch || "" };
+  const sampleLink = (
+    <Link to="/sample-edition" state={{ browsePath: pathname, browseSearch: search, articleHash: hash, articleState: state }}>
+      Read sample edition
+    </Link>
+  );
 
   useEffect(() => {
     let isCurrentRequest = true;
@@ -33,7 +38,8 @@ const SingleArticle = ({ savedStories, onSaveStory }) => {
           setError(
             [400, 404, 410].includes(failure.response?.status)
               ? "missing"
-              : failure.response?.status === 429 ? "limited" : "unavailable",
+              : failure.response?.status === 429 ? "limited"
+                : isTransientArticleFailure(failure) ? "unavailable" : "failed",
           );
       })
       .finally(() => {
@@ -50,6 +56,7 @@ const SingleArticle = ({ savedStories, onSaveStory }) => {
       <main className={styles["single-article-card"]}>
         <h2 role="status">Article is loading…</h2>
         <p>The free demo API can take about a minute to wake.</p>
+        {sampleLink}
       </main>
     );
 
@@ -63,15 +70,13 @@ const SingleArticle = ({ savedStories, onSaveStory }) => {
               ? "The news service is limiting connections. Wait a minute, then retry."
             : "This article could not be loaded right now."}
         </p>
-        {error !== "missing" && (
-          <button
-            type="button"
-            onClick={() => setRetryCount((count) => count + 1)}
-          >
-            Retry article
-          </button>
-        )}
-        <Link to={backToArticles}>{state?.fromSaved ? "Back to saved stories" : "Back to articles"}</Link>
+        <div className={styles.actions}>
+          {error !== "missing" && (
+            <button type="button" onClick={() => setRetryCount((count) => count + 1)}>Retry article</button>
+          )}
+          <Link to={backToArticles}>{state?.fromSaved ? "Back to saved stories" : "Back to articles"}</Link>
+          {(error === "limited" || error === "unavailable") && sampleLink}
+        </div>
       </main>
     );
   }

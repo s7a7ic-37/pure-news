@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, matchPath, useLocation } from "react-router-dom";
 import listStyles from "./ArticleList.module.css";
 import cardStyles from "./ArticleCard.module.css";
 import styles from "./SampleEdition.module.css";
@@ -34,16 +34,21 @@ const stories = [
 export default function SampleEdition() {
   const { state } = useLocation();
   const heading = useRef(null);
-  const backToFeed = {
-    pathname: state?.browsePath === "/home" ? "/home" : "/",
+  const browsePath = state?.browsePath;
+  const fromArticle = typeof browsePath === "string" && matchPath("/articles/:article_id", browsePath) !== null;
+  const back = {
+    pathname: fromArticle || browsePath === "/home" ? browsePath : "/",
     search: state?.browseSearch || "",
+    hash: fromArticle ? state.articleHash || "" : "",
   };
 
   useEffect(() => { heading.current?.focus(); }, []);
 
   return (
     <main className={listStyles["article-list"]}>
-      <Link className={styles.back} to={backToFeed}>← Back to live feed</Link>
+      <Link className={styles.back} to={back} state={fromArticle ? state.articleState : undefined}>
+        {fromArticle ? "← Back to article" : "← Back to live feed"}
+      </Link>
       <h2 ref={heading} tabIndex={-1} className={listStyles["article-list-title"]}>Sample edition</h2>
       <p className={styles.note}>Three fictional stories in a read-only edition.</p>
       <ul className={listStyles["article-card-list"]}>

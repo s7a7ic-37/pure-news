@@ -209,6 +209,61 @@ test("the sample edition can open before the live feed responds", async ({ page 
   }
 });
 
+test("a direct story link offers the sample during an outage and restores the story URL", async ({ page }) => {
+  const storyUrl = "/articles/25?source=shared#story";
+  let release;
+  const pending = new Promise(resolve => { release = resolve; });
+  let reads = 0;
+  let comments = 0;
+  await page.route("**/api/articles/25", async route => {
+    expect(route.request().method()).toBe("GET");
+    if (++reads === 1) await pending;
+    if (reads < 3) return route.fulfill({ status: 503, json: { message: "Simulated outage" } });
+    return route.fulfill({ json: { article: stories[24] } });
+  });
+  await page.route("**/api/articles/25/comments", route => {
+    expect(route.request().method()).toBe("GET");
+    comments++;
+    return route.fulfill({ json: { comments: [] } });
+  });
+
+  try {
+    await page.goto(storyUrl);
+    await expect(page.getByRole("status")).toContainText("Article is loading");
+    const sample = page.getByRole("link", { name: "Read sample edition", exact: true });
+    const back = page.getByRole("link", { name: "← Back to article", exact: true });
+    const sampleHeading = page.getByRole("heading", { name: "Sample edition", exact: true });
+    await expect(sample).toBeVisible();
+    await expect.poll(() => reads).toBe(1);
+    await sample.press("Enter");
+    await expect(sampleHeading).toBeFocused();
+    await expect(page.getByRole("article")).toHaveCount(3);
+    await expect(back).toHaveAttribute("href", storyUrl);
+    expect(reads).toBe(1);
+    expect(comments).toBe(0);
+
+    const unavailable = page.waitForResponse(response => response.url().endsWith("/api/articles/25"));
+    release();
+    expect((await unavailable).status()).toBe(503);
+    await expect(sampleHeading).toBeFocused();
+    await back.press("Enter");
+    await expect(page).toHaveURL(new URL(storyUrl, page.url()).href);
+    await expect(page.getByRole("alert")).toContainText("This article could not be loaded right now.");
+    await expect(sample).toBeVisible();
+    await sample.press("Enter");
+    await expect(sampleHeading).toBeFocused();
+    await back.press("Enter");
+    await expect(page.getByRole("heading", { name: stories[24].title })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Comments" })).toBeVisible();
+    await expect(sample).toHaveCount(0);
+    expect(reads).toBe(3);
+    expect(comments).toBe(1);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(page.viewportSize().width);
+  } finally {
+    release();
+  }
+});
+
 test("a first read can open the fictional edition and return to retry the original feed", async ({ page, context }) => {
   const browseUrl = "/home?topic=coding&q=library&sort_by=title&order=asc&p=3";
   let responseStatus = 429;
